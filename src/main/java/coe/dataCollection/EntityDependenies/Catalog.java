@@ -1,13 +1,13 @@
 package coe.dataCollection;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
@@ -61,11 +61,11 @@ public class Catalog {
         this.creditHours = creditHours;
     }
 
-    public ClassType getClassType() {
+    public CClassType getClassType() {
         return classType;
     }
 
-    public void setClassType(ClassType classType) {
+    public void setClassType(CClassType classType) {
         this.classType = classType;
 	}
 }
