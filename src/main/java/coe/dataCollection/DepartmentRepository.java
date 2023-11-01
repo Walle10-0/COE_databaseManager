@@ -3,12 +3,14 @@ package coe.dataCollection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import coe.dataCollection.User;
 import coe.dataCollection.Department;
 
 import java.util.List;
 
+@Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
     // You can add custom query methods here if needed
 	

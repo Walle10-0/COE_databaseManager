@@ -13,9 +13,8 @@ import jakarta.persistence.ManyToOne;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "general_info", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
-@SecondaryTable({
-    @SecondaryTable(name="research_scholarly", 
-        pkJoinColumns=@PrimaryKeyJoinColumn(name="uid"))})
+@SecondaryTable(name="research_scholarly", 
+        pkJoinColumns=@PrimaryKeyJoinColumn(name="uid"))
 
 public class User {
   @Id
