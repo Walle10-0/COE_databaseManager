@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -40,5 +41,12 @@ public class TestController {
     // This returns a JSON or XML with the users
 	System.out.println("execute order 67");
     return departmentRepository.findAll();
+  }
+  
+  @GetMapping("/department/{id}/users")
+  public @ResponseBody List<User> getAllDepartmentUsers(@PathVariable int id) {
+    // This returns a JSON or XML with the users
+	System.out.println("show users");
+    return departmentRepository.findUsersByDepartmentId(id);
   }
 }
