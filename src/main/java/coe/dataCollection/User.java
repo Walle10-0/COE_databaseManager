@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.SecondaryTable;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity // This tells Hibernate to make a table out of this class

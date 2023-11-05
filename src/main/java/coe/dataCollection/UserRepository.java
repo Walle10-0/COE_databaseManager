@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long>
 	@Query("SELECT u FROM User u WHERE u.uid = :check")
 	public List<User> findByNameContaining(@Param("check") String check);
 	
-	@Query("SELECT u FROM User u WHERE u.dept.id = :check")
-	public List<User> findByDeptNum(int depNum);
+	@Query("SELECT u FROM User u WHERE u.dept.id = :depNum")
+	public List<User> findByDeptNum(@Param("depNum") int depNum);
 
 }
