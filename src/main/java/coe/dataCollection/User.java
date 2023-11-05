@@ -83,4 +83,149 @@ public class User {
   private int patentInnovation;
 
 	// make setters and getters
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public CLoad getLoad() {
+        return load;
+    }
+
+    public void setLoad(CLoad load) {
+        this.load = load;
+    }
+
+    public URank getRank() {
+        return rank;
+    }
+
+    public void setRank(URank rank) {
+        this.rank = rank;
+    }
+
+    public UStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UStatus status) {
+        this.status = status;
+    }
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
+
+    public int getJournals() {
+        return journals;
+    }
+
+    public void setJournals(int journals) {
+        this.journals = journals;
+    }
+
+    public int getConferences() {
+        return conferences;
+    }
+
+    public void setConferences(int conferences) {
+        this.conferences = conferences;
+    }
+
+    public int getBooks() {
+        return books;
+    }
+
+    public void setBooks(int books) {
+        this.books = books;
+    }
+
+    public int getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(int chapters) {
+        this.chapters = chapters;
+    }
+
+    public Long getGrants() {
+        return grants;
+    }
+
+    public void setGrants(Long grants) {
+        this.grants = grants;
+    }
+
+    public Long getResearchExperienceTotal() {
+        return researchExperienceTotal;
+    }
+
+    public void setResearchExperienceTotal(Long researchExperienceTotal) {
+        this.researchExperienceTotal = researchExperienceTotal;
+    }
+
+    public Long getResearchExperienceStudents() {
+        return researchExperienceStudents;
+    }
+
+    public void setResearchExperienceStudents(Long researchExperienceStudents) {
+        this.researchExperienceStudents = researchExperienceStudents;
+    }
+
+    public int getPhdAdvised() {
+        return phdAdvised;
+    }
+
+    public void setPhdAdvised(int phdAdvised) {
+        this.phdAdvised = phdAdvised;
+    }
+
+    public int getPhdCompleted() {
+        return phdCompleted;
+    }
+
+    public void setPhdCompleted(int phdCompleted) {
+        this.phdCompleted = phdCompleted;
+    }
+
+    public int getMsCompleted() {
+        return msCompleted;
+    }
+
+    public void setMsCompleted(int msCompleted) {
+        this.msCompleted = msCompleted;
+    }
+
+    public int getPatentInnovation() {
+        return patentInnovation;
+    }
+
+    public void setPatentInnovation(int patentInnovation) {
+        this.patentInnovation = patentInnovation;
+    }
+
 }
