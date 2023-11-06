@@ -49,4 +49,11 @@ public class TestController {
 	System.out.println("show users");
     return departmentRepository.findUsersByDepartmentId(id);
   }
+  
+  @GetMapping("/user/{id}")
+  public @ResponseBody List<User> getUser(@PathVariable Long id) {
+    // This returns a JSON or XML with the users
+	System.out.println("user");
+    return userRepository.findByUID(id);
+  }
 }
