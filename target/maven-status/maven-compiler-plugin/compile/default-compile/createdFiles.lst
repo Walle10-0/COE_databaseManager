@@ -9,6 +9,7 @@ coe\dataCollection\TestController.class
 coe\dataCollection\Catalog.class
 coe\dataCollection\SemesterName.class
 coe\dataCollection\Semester.class
+coe\dataCollection\UserRole.class
 coe\dataCollection\DepartmentRepository.class
 coe\dataCollection\UStatus.class
 coe\dataCollection\Department.class

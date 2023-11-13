@@ -23,13 +23,19 @@ public class User {
   @Column(name = "uid", table = "general_info")
   private Long uid;
   
-  // feilds from general_info
+  // fields from general_info
   
   @Column(name = "last_name", table = "general_info")
   private String lastName;
 
   @Column(name = "first_name", table = "general_info")
   private String firstName;
+  
+  @Column(name = "pin", table = "general_info")
+  private char[] pin;
+  
+  @Column(name = "salt", table = "general_info")
+  private char[] salt;
   
   @ManyToOne
   @JoinColumn(name = "_load", table = "general_info")
@@ -46,6 +52,10 @@ public class User {
   @ManyToOne
   @JoinColumn(name = "_dept", table = "general_info")
   private Department dept;
+  
+  @ManyToOne
+  @JoinColumn(name = "_user_role", table = "general_info")
+  private UserRole userRole;
   
   // feilds from research_scholarly
   
@@ -107,6 +117,22 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+	
+	public char[] getPin() {
+		return pin;
+	}
+	
+	public void setPin(char[] newPin) {
+		this.pin = newPin;
+	}
+	
+	public char[] getSalt() {
+		return salt;
+	}
+	
+	public void setSalt(char[] theOcean) {
+		this.salt = theOcean;
+	}
 
     public CLoad getLoad() {
         return load;
@@ -138,6 +164,14 @@ public class User {
 
     public void setDept(Department dept) {
         this.dept = dept;
+    }
+	
+	public UserRole getRole() {
+        return userRole;
+    }
+
+    public void setRole(UserRole role) {
+        this.userRole = role;
     }
 
     public int getJournals() {
