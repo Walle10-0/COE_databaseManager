@@ -12,6 +12,8 @@ coe\dataCollection\Semester.class
 coe\dataCollection\UserRole.class
 coe\dataCollection\DepartmentRepository.class
 coe\dataCollection\UStatus.class
+coe\dataCollection\Teaching.class
+coe\dataCollection\UServices.class
 coe\dataCollection\Department.class
 coe\dataCollection\UClasses.class
 coe\dataCollection\UserRepository.class

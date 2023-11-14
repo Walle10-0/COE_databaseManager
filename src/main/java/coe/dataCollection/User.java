@@ -3,6 +3,8 @@ package coe.dataCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
@@ -11,6 +13,9 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "general_info", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
@@ -91,6 +96,20 @@ public class User {
   
   @Column(name = "patent_innovation", table = "research_scholarly")
   private int patentInnovation;
+  
+  @Column(name = "ug_mentored", table = "research_scholarly")
+  private int ugMentored;
+  
+  // complex stuff
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Teaching> teaching;
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<UClasses> classes;
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<UServices> serviceActivity;
 
 	// make setters and getters
 
@@ -261,5 +280,36 @@ public class User {
     public void setPatentInnovation(int patentInnovation) {
         this.patentInnovation = patentInnovation;
     }
+	
+	public int getUgMentored() {
+        return ugMentored;
+    }
 
+    public void setUgMentored(int newMentored) {
+        this.ugMentored = newMentored;
+    }
+	
+	public List<Teaching> getTeaching() {
+		return this.teaching;
+	}
+	
+	public void setTeaching(List<Teaching> newTeaching) {
+		this.teaching = newTeaching;
+	}
+	
+	public List<UClasses> getClasses() {
+		return this.classes;
+	}
+	
+	public void setClasses(List<UClasses> newClasses) {
+		this.classes = newClasses;
+	}
+	
+	public List<UServices> getServiceActivity() {
+		return this.serviceActivity;
+	}
+	
+	public void setServiceActivity(List<UServices> newServices) {
+		this.serviceActivity = newServices;
+	}
 }
