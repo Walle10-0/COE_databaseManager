@@ -3,6 +3,8 @@ package coe.dataCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
@@ -11,6 +13,9 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "general_info", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
@@ -23,13 +28,19 @@ public class User {
   @Column(name = "uid", table = "general_info")
   private Long uid;
   
-  // feilds from general_info
+  // fields from general_info
   
   @Column(name = "last_name", table = "general_info")
   private String lastName;
 
   @Column(name = "first_name", table = "general_info")
   private String firstName;
+  
+  @Column(name = "pin", table = "general_info")
+  private char[] pin;
+  
+  @Column(name = "salt", table = "general_info")
+  private char[] salt;
   
   @ManyToOne
   @JoinColumn(name = "_load", table = "general_info")
@@ -46,6 +57,10 @@ public class User {
   @ManyToOne
   @JoinColumn(name = "_dept", table = "general_info")
   private Department dept;
+  
+  @ManyToOne
+  @JoinColumn(name = "_user_role", table = "general_info")
+  private UserRole userRole;
   
   // feilds from research_scholarly
   
@@ -81,6 +96,20 @@ public class User {
   
   @Column(name = "patent_innovation", table = "research_scholarly")
   private int patentInnovation;
+  
+  @Column(name = "ug_mentored", table = "research_scholarly")
+  private int ugMentored;
+  
+  // complex stuff
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Teaching> teaching;
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<UClasses> classes;
+  
+  @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<UServices> serviceActivity;
 
 	// make setters and getters
 
@@ -107,6 +136,22 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+	
+	public char[] getPin() {
+		return pin;
+	}
+	
+	public void setPin(char[] newPin) {
+		this.pin = newPin;
+	}
+	
+	public char[] getSalt() {
+		return salt;
+	}
+	
+	public void setSalt(char[] theOcean) {
+		this.salt = theOcean;
+	}
 
     public CLoad getLoad() {
         return load;
@@ -138,6 +183,14 @@ public class User {
 
     public void setDept(Department dept) {
         this.dept = dept;
+    }
+	
+	public UserRole getRole() {
+        return userRole;
+    }
+
+    public void setRole(UserRole role) {
+        this.userRole = role;
     }
 
     public int getJournals() {
@@ -227,5 +280,36 @@ public class User {
     public void setPatentInnovation(int patentInnovation) {
         this.patentInnovation = patentInnovation;
     }
+	
+	public int getUgMentored() {
+        return ugMentored;
+    }
 
+    public void setUgMentored(int newMentored) {
+        this.ugMentored = newMentored;
+    }
+	
+	public List<Teaching> getTeaching() {
+		return this.teaching;
+	}
+	
+	public void setTeaching(List<Teaching> newTeaching) {
+		this.teaching = newTeaching;
+	}
+	
+	public List<UClasses> getClasses() {
+		return this.classes;
+	}
+	
+	public void setClasses(List<UClasses> newClasses) {
+		this.classes = newClasses;
+	}
+	
+	public List<UServices> getServiceActivity() {
+		return this.serviceActivity;
+	}
+	
+	public void setServiceActivity(List<UServices> newServices) {
+		this.serviceActivity = newServices;
+	}
 }
