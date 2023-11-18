@@ -1,13 +1,13 @@
-package coe.dataCollection;
+package coe.datacollection; 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DataCollectionApplication {
+public class CoeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DataCollectionApplication.class, args);
+		SpringApplication.run(CoeApplication.class, args);
 	}
 
 }

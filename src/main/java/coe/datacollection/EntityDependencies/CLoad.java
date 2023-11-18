@@ -1,4 +1,4 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,20 +9,19 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity // This tells Hibernate to make a table out of this class
-@Table(name = "_load", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class CLoad
-{
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
- 
-	@Column(name = "_load")
-	private String load;
+@Table(name = "_load", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
+public class CLoad {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	// setters and getters
-	
-	public int getId() {
+    @Column(name = "_load")
+    private String load;
+
+    // setters and getters
+
+    public int getId() {
         return id;
     }
 

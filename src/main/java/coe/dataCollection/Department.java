@@ -1,48 +1,36 @@
-package coe.dataCollection;
+package coe.datacollection;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.OneToMany;
-
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity // This tells Hibernate to make a table out of this class
-@Table(name = "_dept", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class Department
-{
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
- 
-	@Column(name = "_dept")
-	private String name;
-	
-	@OneToMany(mappedBy="dept", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> users;
+@Entity
+@Table(name = "departments")
+public class Department {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer deptId;
 
-	// setters and getters
-	
-	public int getId() {
-        return id;
+    @Column(name = "name", nullable = false)
+    private String deptName;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> deptUsers = new ArrayList<>();
+
+    // Standard getters and setters
+    public int getDeptId() {
+        return deptId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.deptId = id;
     }
 
     public String getDepartment() {
-        return name;
+        return deptName;
     }
 
     public void setDepartment(String dept) {
-        this.name = dept;
+        this.deptName = dept;
     }
 }

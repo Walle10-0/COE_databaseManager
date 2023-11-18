@@ -1,13 +1,9 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
@@ -15,45 +11,36 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-import coe.dataCollection.User;
-import coe.dataCollection.Department;
-import coe.dataCollection.UserRepository;
-import coe.dataCollection.DepartmentRepository;
-
-@Controller // This means that this class is a Controller
-@RequestMapping("/demo")
+@RestController
+@RequestMapping("/api")
 public class TestController {
   @Autowired // This means to get the bean called userRepository
   private UserRepository userRepository;
-  
+
   @Autowired // This means to get the bean called userRepository
   private DepartmentRepository departmentRepository;
 
   @GetMapping("/users")
-  public @ResponseBody List<User> getAllUsers() {
-    // This returns a JSON or XML with the users
-	System.out.println("execute order 66");
-    return userRepository.findAll();
+  public ResponseEntity<List<User>> getAllUsers() {
+    return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
   }
-  
+
   @GetMapping("/departments")
-  public @ResponseBody List<Department> getAllDepartments() {
-    // This returns a JSON or XML with the users
-	System.out.println("execute order 67");
-    return departmentRepository.findAll();
+  public ResponseEntity<List<Department>> getAllDepartments() {
+    return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
   }
-  
+
   @GetMapping("/department/{id}/users")
   public @ResponseBody List<User> getAllDepartmentUsers(@PathVariable int id) {
     // This returns a JSON or XML with the users
-	System.out.println("show users");
+    // System.out.println("show users");
     return departmentRepository.findUsersByDepartmentId(id);
   }
-  
+
   @GetMapping("/user/{id}")
   public @ResponseBody List<User> getUser(@PathVariable Long id) {
     // This returns a JSON or XML with the users
-	System.out.println("user");
+    // System.out.println("user");
     return userRepository.findByUID(id);
   }
 }

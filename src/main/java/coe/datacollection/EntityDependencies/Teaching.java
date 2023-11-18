@@ -1,4 +1,4 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
@@ -9,28 +9,27 @@ import jakarta.persistence.ManyToOne;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "teaching")
-public class Teaching
-{
-	@Id
-	@ManyToOne
+public class Teaching {
+    @Id
+    @ManyToOne
     @JoinColumn(name = "uid")
     private User user;
-	
-	@Id
-	@ManyToOne
+
+    @Id
+    @ManyToOne
     @JoinColumn(name = "_semester")
     private Semester semester;
-	
-	@Column(name = "new_preps")
-	private int newPreps;
-	
-	@Column(name = "new_devs")
-	private int newDevs;
-	
-	@Column(name = "overloads")
-	private int overloads;
-	
-	// Constructors
+
+    @Column(name = "new_preps")
+    private int newPreps;
+
+    @Column(name = "new_devs")
+    private int newDevs;
+
+    @Column(name = "overloads")
+    private int overloads;
+
+    // Constructors
     public Teaching() {
     }
 
@@ -41,9 +40,9 @@ public class Teaching
         this.newDevs = newDevs;
         this.overloads = overloads;
     }
-	
-	// Getters and setters
-	
+
+    // Getters and setters
+
     public User getUser() {
         return user;
     }

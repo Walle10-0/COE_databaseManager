@@ -1,4 +1,4 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,18 +8,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-@Entity
-@Table(name = "_semester_name", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class SemesterName {
+@Entity // This tells Hibernate to make a table out of this class
+@Table(name = "_status", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
+public class UStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "_semester_name")
-    private String semesterName;
+    @Column(name = "_status")
+    private String status;
 
-    // Getters and setters
+    // setters and getters
+
     public int getId() {
         return id;
     }
@@ -28,11 +29,11 @@ public class SemesterName {
         this.id = id;
     }
 
-    public String getSemesterName() {
-        return semesterName;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSemesterName(String semesterName) {
-        this.semesterName = semesterName;
+    public void setStatus(String x) {
+        this.status = x;
     }
 }

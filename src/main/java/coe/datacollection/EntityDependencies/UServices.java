@@ -1,4 +1,4 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,14 +10,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "classes")
-public class UClasses {
-	
-	@Id
+@Table(name = "service_activity")
+public class UServices {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+    @Column(name = "id")
     private int id;
-	
+
     @ManyToOne
     @JoinColumn(name = "uid")
     private User user;
@@ -27,24 +27,28 @@ public class UClasses {
     private Semester semester;
 
     @ManyToOne
-    @JoinColumn(name = "_catalog")
-    private Catalog catalog;
-	
-    @Column(name = "students")
-    private int students;
-    
+    @JoinColumn(name = "_level")
+    private SLevel level;
+
+    @Column(name = "description")
+    private String description;
+
     // Constructors
-    public UClasses() {
+
+    public UServices() {
+        // Default constructor
     }
 
-    public UClasses(User user, Semester semester, Catalog catalog, int students) {
-        this.user = user;
-        this.semester = semester;
-        this.catalog = catalog;
-        this.students = students;
+    // Getters and Setters
+
+    public int getId() {
+        return id;
     }
 
-    // Getters and setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public User getUser() {
         return user;
     }
@@ -61,19 +65,19 @@ public class UClasses {
         this.semester = semester;
     }
 
-    public Catalog getCatalog() {
-        return catalog;
+    public SLevel getLevel() {
+        return level;
     }
 
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
+    public void setLevel(SLevel level) {
+        this.level = level;
     }
 
-    public int getStudents() {
-        return students;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStudents(int students) {
-        this.students = students;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
