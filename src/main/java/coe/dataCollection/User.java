@@ -2,13 +2,22 @@ package coe.datacollection;
 
 import jakarta.persistence.*;
 
+import lombok.Data;
+
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@Data
 @Entity
-@Table(name = "users")
+@Table(name = "general_info", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
+@SecondaryTable(name="research_scholarly", 
+        pkJoinColumns=@PrimaryKeyJoinColumn(name="uid"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "uid", table = "general_info", nullable = false)
     private Long userId;
 
     // fields from general_info
@@ -37,11 +46,12 @@ public class User {
     private UStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "_dept", table = "general_info")
-    private Department dept;
+	@JsonManagedReference
+    @JoinColumn(name = "_dept", table = "general_info", nullable = false)
+    private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "_user_role", table = "general_info")
+    @JoinColumn(name = "_user_role", table = "general_info", nullable = false)
     private UserRole userRole;
 
     // feilds from research_scholarly
@@ -83,21 +93,19 @@ public class User {
     private int ugMentored;
 
     // complex stuff
-
+	@JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teaching> teaching;
 
+	@JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UClasses> classes;
 
+	@JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UServices> serviceActivity;
 
-    // @Column(name = "department_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private Department department;
-
+/*
     // Standard getters and setters
     public Long getUserId() {
         return userId;
@@ -170,13 +178,13 @@ public class User {
     public void setStatus(UStatus status) {
         this.status = status;
     }
-
-    public Department getDept() {
-        return dept;
+	
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDept(Department dept) {
-        this.dept = dept;
+    public void setDepartment(Department dept) {
+        this.department = dept;
     }
 
     public int getJournals() {
@@ -297,5 +305,5 @@ public class User {
 
     public void setServiceActivity(List<UServices> newServices) {
         this.serviceActivity = newServices;
-    }
+    }*/
 }

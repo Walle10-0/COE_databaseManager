@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "teaching")
@@ -13,6 +14,7 @@ public class Teaching {
     @Id
     @ManyToOne
     @JoinColumn(name = "uid")
+	@JsonBackReference
     private User user;
 
     @Id

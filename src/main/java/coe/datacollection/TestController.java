@@ -22,7 +22,8 @@ public class TestController {
 
   @GetMapping("/users")
   public ResponseEntity<List<User>> getAllUsers() {
-    return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+	// This returns a JSON or XML with the users
+	return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
   }
 
   @GetMapping("/departments")
@@ -31,16 +32,15 @@ public class TestController {
   }
 
   @GetMapping("/department/{id}/users")
-  public @ResponseBody List<User> getAllDepartmentUsers(@PathVariable int id) {
+  public ResponseEntity<List<User>> getAllDepartmentUsers(@PathVariable int id) {
     // This returns a JSON or XML with the users
-    // System.out.println("show users");
-    return departmentRepository.findUsersByDepartmentId(id);
+    return new ResponseEntity<>(userRepository.findUsersByDepartmentId(id), HttpStatus.OK);
   }
 
   @GetMapping("/user/{id}")
-  public @ResponseBody List<User> getUser(@PathVariable Long id) {
+  public ResponseEntity<List<User>> getUser(@PathVariable Long id) {
     // This returns a JSON or XML with the users
     // System.out.println("user");
-    return userRepository.findByUID(id);
+    return new ResponseEntity<>(userRepository.findByUID(id), HttpStatus.OK);
   }
 }

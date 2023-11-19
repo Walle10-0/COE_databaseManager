@@ -1,10 +1,10 @@
-package coe.dataCollection;
+package coe.datacollection;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DataCollectionApplicationTests {
+class DatacollectionApplicationTests {
 
 	@Test
 	void contextLoads() {

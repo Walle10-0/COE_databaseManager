@@ -14,16 +14,16 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 
 	public Department findById(int id);
 
-	@Query("SELECT d.name FROM Department d WHERE d.id = :id")
+	@Query("SELECT d.deptName FROM Department d WHERE d.deptId = :id")
 	public String findNameFromId(@Param("id") Integer id);
 
-	@Query("SELECT d.id FROM Department d WHERE d.name = :name")
+	@Query("SELECT d.deptId FROM Department d WHERE d.deptName = :name")
 	public String findIdFromName(@Param("name") Integer name);
 
-	@Query("SELECT d.users FROM Department d WHERE d.id = :id")
-	public List<User> findUsersByDepartmentId(@Param("id") Integer id);
+	//@Query("SELECT d.deptUsers FROM Department d WHERE d.deptId = :id")
+	//public List<User> findUsersByDepartmentId(@Param("id") Integer id);
 
-	@Query("SELECT d FROM Department d WHERE d.name LIKE %:partialName%")
+	@Query("SELECT d FROM Department d WHERE d.deptName LIKE %:partialName%")
 	public List<Department> findByNameContaining(@Param("partialName") String partialName);
 
 }

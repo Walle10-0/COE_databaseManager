@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "_user_role")
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +15,8 @@ public class UserRole {
     @Column(name = "_user_role")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    //@OneToMany(mappedBy = "userRole")
+    //private Set<User> users;
 
     public UserRole() {
         // default constructor
@@ -36,14 +37,14 @@ public class UserRole {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
-
+/*
     public Set<User> getUsers() {
         return users;
     }
 
     public void setUsers(Set<User> users) {
         this.users = users;
-    }
+    }*/
 
     // add hashCode, equals, and toString methods if needed
 }

@@ -61,7 +61,7 @@ public class UserService {
         userDTO.setId(user.getUserId());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        userDTO.setRole(user.getRole());
+        userDTO.setRole(user.getUserRole());
         return userDTO;
     }
 
