@@ -19,7 +19,7 @@ public class Department {
     //private List<User> deptUsers;
 
     // Standard getters and setters
-    public int getDeptId() {
+    public int getId() {
         return deptId;
     }
 

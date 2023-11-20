@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class TestController {
+public class MainController {
   @Autowired // This means to get the bean called userRepository
   private UserRepository userRepository;
 

@@ -1,54 +1,33 @@
 package coe.datacollection;
 
+import lombok.Data;
+
+@Data
 public class UserDTO {
+	// general info
     private Long id;
     private String lastName;
     private String firstName;
-    // Other fields that you want to expose in the DTO
-    private Integer departmentId;
-    private UserRole userRole;
-
-    // Standard getters and setters
-
-    public UserRole getRole() {
-        return userRole;
-    }
-
-    public void setRole(UserRole role) {
-        this.userRole = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    // ... other getters and setters
-
-    public Integer getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
-    }
+	private String departmentName;
+    private int departmentId;
+	private String roleName;
+	
+	// feilds from general_info
+    private String load;
+    private String rank;
+    private String status;
+	
+	// feilds from research_scholarly
+    private int journals;
+    private int conferences;
+    private int books;
+    private int chapters;
+    private Long grants;
+    private Long researchExperienceTotal;
+    private Long researchExperienceStudents;
+    private int phdAdvised;
+    private int phdCompleted;
+    private int msCompleted;
+    private int patentInnovation;
+    private int ugMentored;
 }

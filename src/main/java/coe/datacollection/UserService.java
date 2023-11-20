@@ -2,6 +2,7 @@ package coe.datacollection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 //import java.util.Optional;
 
@@ -24,12 +25,10 @@ public class UserService {
         return convertToDTO(user);
     }
 
-    // // retrieve all users
-    // public List<UserDTO> getAllUsers() {
-    // return UserRepository.findAll().stream()
-    // .map(this::convertToDTO)
-    // .collect(Collectors.toList());
-    // }
+    // retrieve all users
+    public List<UserDTO> getAllUsers() {
+    return convertToDTO(UserRepository.findAll());
+    }
 
     public UserDTO getCurrentUser(Long currentUserId) {
         User currentUser = UserRepository.findById(currentUserId).orElse(null);
@@ -58,11 +57,42 @@ public class UserService {
     // convert User to UserDTO
     private UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
+		
         userDTO.setId(user.getUserId());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        userDTO.setRole(user.getUserRole());
+		userDTO.setDepartmentName(user.getDepartment().getDepartment());
+		userDTO.setDepartmentId(user.getDepartment().getId());
+        userDTO.setRoleName(user.getUserRole().getRoleName());
+		
+		userDTO.setLoad(user.getLoad().getLoad());
+		userDTO.setRank(user.getRank().getRank());
+		userDTO.setStatus(user.getStatus().getStatus());
+		
+		userDTO.setJournals(user.getJournals());
+		userDTO.setConferences(user.getConferences());
+		userDTO.setBooks(user.getBooks());
+		userDTO.setChapters(user.getChapters());
+		userDTO.setGrants(user.getGrants());
+		userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
+		userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
+		userDTO.setPhdAdvised(user.getPhdAdvised());
+		userDTO.setPhdCompleted(user.getPhdCompleted());
+		userDTO.setMsCompleted(user.getMsCompleted());
+		userDTO.setPatentInnovation(user.getPatentInnovation());
+		userDTO.setUgMentored(user.getUgMentored());
+		
         return userDTO;
+    }
+	
+	private List<UserDTO> convertToDTO(List<User> user) {
+        List<UserDTO> DTOList = new ArrayList<UserDTO>();
+		
+        for (User current : user) {
+			DTOList.add(convertToDTO(current));
+		}
+		
+        return DTOList;
     }
 
     // convert UserDTO to User
