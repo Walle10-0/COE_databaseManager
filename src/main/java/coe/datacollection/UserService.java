@@ -27,11 +27,11 @@ public class UserService {
 
     // retrieve all users
     public List<UserDTO> getAllUsers() {
-    return convertToDTO(UserRepository.findAll());
+		return convertToDTO(UserRepository.findAll());
     }
 
-    public UserDTO getCurrentUser(Long currentUserId) {
-        User currentUser = UserRepository.findById(currentUserId).orElse(null);
+    public UserDTO getUser(Long userId) {
+        User currentUser = UserRepository.findById(userId).orElse(null);
         return currentUser != null ? convertToDTO(currentUser) : null;
     }
 
@@ -109,7 +109,7 @@ public class UserService {
 
     // export current user to JSON
     public String exportCurrentUserToJSON(Long currentUserId) throws Exception {
-        UserDTO currentUserDTO = getCurrentUser(currentUserId);
+        UserDTO currentUserDTO = getUser(currentUserId);
         if (currentUserDTO != null) {
             return ExportUtility.exportToJSON(List.of(currentUserDTO));
         }
@@ -121,4 +121,8 @@ public class UserService {
     // List<UserDTO> userDTOs = getAllUsers();
     // return ExportUtility.exportToJSON(userDTOs);
     // }
+	
+	public List<UserDTO> findUsersByDepartmentId(int id) {
+		return convertToDTO(UserRepository.findUsersByDepartmentId(id));
+	}
 }

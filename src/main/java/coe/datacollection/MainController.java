@@ -14,16 +14,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class MainController {
-  @Autowired // This means to get the bean called userRepository
-  private UserRepository userRepository;
+  //@Autowired // This means to get the bean called userRepository
+  //private UserRepository userRepository;
+  
+  @Autowired //  Automatically gets userService
+  private UserService userService;
 
-  @Autowired // This means to get the bean called userRepository
+  @Autowired // This means to get the bean called departmentRepository
   private DepartmentRepository departmentRepository;
 
+  // This returns a JSON or XML with the users
   @GetMapping("/users")
-  public ResponseEntity<List<User>> getAllUsers() {
-	// This returns a JSON or XML with the users
-	return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
+	System.out.println("Retrieved all users");
+	return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
   }
 
   @GetMapping("/departments")
@@ -31,16 +35,18 @@ public class MainController {
     return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
   }
 
+  // This returns a JSON or XML with the users of a single department
   @GetMapping("/department/{id}/users")
-  public ResponseEntity<List<User>> getAllDepartmentUsers(@PathVariable int id) {
-    // This returns a JSON or XML with the users
-    return new ResponseEntity<>(userRepository.findUsersByDepartmentId(id), HttpStatus.OK);
+  public ResponseEntity<List<UserDTO>> getAllDepartmentUsers(@PathVariable int id) {
+	System.out.println("Retrieved all users from department : " + id);
+    //return new ResponseEntity<>(userRepository.findUsersByDepartmentId(id), HttpStatus.OK);
+	return new ResponseEntity<>(userService.findUsersByDepartmentId(id), HttpStatus.OK);
   }
 
+  // This returns a JSON for a single users
   @GetMapping("/user/{id}")
-  public ResponseEntity<List<User>> getUser(@PathVariable Long id) {
-    // This returns a JSON or XML with the users
-    // System.out.println("user");
-    return new ResponseEntity<>(userRepository.findByUID(id), HttpStatus.OK);
+  public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    System.out.println("Retrieved user : " + id);
+	return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
   }
 }
