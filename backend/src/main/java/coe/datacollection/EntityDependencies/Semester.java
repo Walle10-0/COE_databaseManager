@@ -49,4 +49,9 @@ public class Semester {
     public void setSemesterName(SemesterName semesterName) {
         this.semesterName = semesterName;
     }
+	
+	public String getFullName()
+	{
+		return semesterName.getSemesterName() + " " + year;
+	}
 }
