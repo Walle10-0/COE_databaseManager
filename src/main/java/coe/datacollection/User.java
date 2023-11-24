@@ -1,5 +1,9 @@
 package coe.datacollection;
 
+import coe.datacollection.Teaching;
+import coe.datacollection.UClasses;
+import coe.datacollection.UServices;
+
 import jakarta.persistence.*;
 
 import lombok.Data;

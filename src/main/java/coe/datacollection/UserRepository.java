@@ -24,8 +24,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	//@Query("SELECT u FROM User u WHERE u.uid = :check")
 	//public List<User> findByNameContaining(@Param("check") String check);
-
-	//@Query("SELECT u FROM User u WHERE u.userId = :check")
-	//public List<User> findByUID(@Param("check") Long check);
-
 }

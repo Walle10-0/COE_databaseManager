@@ -1,5 +1,7 @@
 package coe.datacollection;
 
+import coe.datacollection.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,11 +19,11 @@ public class UServices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-	@JsonBackReference
     private int id;
 
     @ManyToOne
     @JoinColumn(name = "uid")
+	@JsonBackReference
     private User user;
 
     @ManyToOne
