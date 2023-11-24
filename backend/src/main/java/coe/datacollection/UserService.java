@@ -62,7 +62,6 @@ public class UserService {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
 		userDTO.setDepartmentName(user.getDepartment().getDepartment());
-		userDTO.setDepartmentId(user.getDepartment().getId());
         userDTO.setRoleName(user.getUserRole().getRoleName());
 		
 		userDTO.setLoad(user.getLoad().getLoad());
@@ -82,9 +81,15 @@ public class UserService {
 		userDTO.setPatentInnovation(user.getPatentInnovation());
 		userDTO.setUgMentored(user.getUgMentored());
 		
+		userDTO.setTeaching(user.getTeaching());
+		userDTO.setClasses(user.getClasses());
+		userDTO.setServiceActivity(user.getServiceActivity());
+		
         return userDTO;
     }
 	
+	// we should avoid this function
+	// use lookups instead
 	private List<UserDTO> convertToDTO(List<User> user) {
         List<UserDTO> DTOList = new ArrayList<UserDTO>();
 		

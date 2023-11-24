@@ -1,5 +1,7 @@
 package coe.datacollection;
 
+import coe.datacollection.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;

@@ -1,5 +1,7 @@
 package coe.datacollection;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -9,7 +11,6 @@ public class UserDTO {
     private String lastName;
     private String firstName;
 	private String departmentName;
-    private int departmentId;
 	private String roleName;
 	
 	// feilds from general_info
@@ -30,4 +31,9 @@ public class UserDTO {
     private int msCompleted;
     private int patentInnovation;
     private int ugMentored;
+	
+	// for testing
+	private List<Teaching> teaching;
+    private List<UClasses> classes;
+    private List<UServices> serviceActivity;
 }
