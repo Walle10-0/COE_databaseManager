@@ -21,7 +21,12 @@ const Layout = () => {
 			
         </ul>
       </nav>
-
+	  
+	  <div className="Title">
+	  <h1>Embry-Riddle Aeronautical University</h1>
+	  <h2>Faculty Information Repository</h2>
+	  </div>
+	  
       <Outlet />
     </>
   )
