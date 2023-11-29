@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
 // to do : bold text + make bigger
@@ -34,7 +35,7 @@ const [department] = '';
 function UserView() {
 	
 	const [jsonData, setJsonData] = useState(null);
-	const userNum = 5;
+	const userNum = 12;
 
 	useEffect(() => {
     const fetchData = async () => {
@@ -49,9 +50,34 @@ function UserView() {
         console.error('Error fetching data:', error);
       }
     };
+	
+	fetchData();
+	}, []);
+	
+	const handleFieldChange = (event) => {
+		const { id, value } = event.target;
 
-    fetchData();
-  }, []);
+		// Update field dynamically inside jsonData
+		setJsonData((prevData) => ({
+		...prevData,
+		[id]: value,
+		}));
+	};
+	
+	const handleNumChange = (event) => {
+		const { id, value } = event.target;
+		const old = jsonData[id];
+
+		try {	
+			// Update field dynamically inside jsonData
+			setJsonData((prevData) => ({
+			...prevData,
+			[id]: parseInt(value),
+			}));
+		} catch (error) {
+			console.error('Error writing data:', error);
+		}
+	};
 		
 	return (
 		<>
@@ -69,9 +95,12 @@ function UserView() {
 				autoComplete="off"
 				>
 				<div>
-					<TextField id="firstName" label="First Name" variant="outlined"/>
-					{jsonData ? (<pre>{jsonData.lastName}</pre>) : (<p>Loading...</p>)}
-					<TextField id="lastName" label="Last Name" variant="outlined" />
+					<TextField id="firstName" label="First Name" variant="outlined"
+					value={jsonData?.firstName || ''}
+					onChange={handleFieldChange}/>
+					<TextField id="lastName" label="Last Name" variant="outlined"
+					value={jsonData?.lastName || ''}
+					onChange={handleFieldChange}/>
 				</div>
 				<div>
 					<TextField
@@ -120,8 +149,11 @@ function UserView() {
 				noValidate
 				autoComplete="off"
 				>
-				<div>
-					<TextField id="Journals" label="Journals" type="number" variant="outlined" defaultValue='0'/>
+				<div>	
+					<TextField id="journals" label="Journals" type="number" variant="outlined"
+					value={jsonData?.journals || ''}
+					onChange={handleNumChange}/>
+					
 					<TextField id="Books" label="Books" type="number" variant="outlined" defaultValue='0'/>
 					<TextField id="Chapters" label="Chapters" type="number" variant="outlined" defaultValue='0' />
 				</div>
