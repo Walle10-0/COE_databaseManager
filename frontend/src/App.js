@@ -6,6 +6,7 @@ import Editing from "./pages/Editing";
 import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 import UserView from "./pages/UserView";
+import MyComponent from "./MyComponent";
 import ViewableList from "./pages/ViewableList";
 import Layout from "./pages/Layout";
 
@@ -18,6 +19,7 @@ function Menu() {
 <Route path="UserView" element={<UserView />} />
 <Route path="ViewableList" element={<ViewableList />} />
 <Route path="Editing" element={<Editing />} />
+<Route path="Test" element={<MyComponent />} />
 <Route path="*" element={<NoPage />} />
 </Route>
 </Routes>
