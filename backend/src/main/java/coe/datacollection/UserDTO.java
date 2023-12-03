@@ -24,6 +24,7 @@ public class UserDTO {
     private int books;
     private int chapters;
     private Long grants;
+	private Long awards;
     private Long researchExperienceTotal;
     private Long researchExperienceStudents;
     private int phdAdvised;

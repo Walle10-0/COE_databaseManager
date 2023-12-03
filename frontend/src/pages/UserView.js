@@ -1,9 +1,8 @@
 import React, { Component, useState, useEffect } from 'react';
 import './App.css';
+import ExpandCollapseButton from './ExpandCollapseButton';
 
-import { Box, TextField, Select, MenuItem, InputLabel, Collapse, IconButton} from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment } from '@mui/material';
 
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
@@ -33,11 +32,18 @@ function UserView() {
 	const [open2, setOpen2] = React.useState(false);
 	const [userData, setUserData] = useState(null);
 	const userNum = 12;
+	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
+	const subBoxFormat = { 
+						
+						};
 
-	useEffect(() => {
-    const fetchData = async () => {
+	useEffect(() => {	
+		fetchData();
+	}, []);
+	
+	const fetchData = async () => {
       try {
-        const response = await fetch('api/user/' + userNum); // Replace this URL with your API endpoint
+        const response = await fetch('api/user/' + userNum);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -47,9 +53,6 @@ function UserView() {
         console.error('Error fetching data:', error);
       }
     };
-	
-	fetchData();
-	}, []);
 	
 	const handleFieldChange = (event) => {
 		const { id, value } = event.target;
@@ -69,27 +72,45 @@ function UserView() {
 			// Update field dynamically inside jsonData
 			setUserData((prevData) => ({
 			...prevData,
-			[id]: parseInt(value),
+			[id]: parseInt(value) || 0,
 			}));
 		} catch (error) {
 			console.error('Error writing data:', error);
 		}
 	};
+	
+	const freeTextField = (id, label) => (
+		<TextField
+			id={id}
+			label={label}
+			variant="outlined"
+			value={userData?.[id] || ''}
+			onChange={handleFieldChange}
+		/>
+	);
+	
+	const intField = (id, label, adornment = null) => (
+		<TextField
+			id={id}
+			label={label}
+			type="number"
+			variant="outlined"
+			value={userData?.[id] || ''}
+			onChange={handleINTChange}
+			InputProps={adornment && {
+				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
+			}}
+		/>
+	);
 		
 	return (
 		<>
 	
 		<div>
 			<center>
-			<Box sx={{ fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 }}>
+			<Box sx={mainBoxFormat}>
 				General Information
-				<IconButton
-					aria-label="expand row"
-					size="small"
-					onClick={() => setOpen1(!open1)}
-				>
-					{open1 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-				</IconButton>
+				<ExpandCollapseButton isOpen={open1} onClick={() => setOpen1(!open1)} />
 				<Collapse in={open1} timeout="auto" unmountOnExit>
 					<Box
 						component="form"
@@ -98,14 +119,8 @@ function UserView() {
 						autoComplete="off"
 					>
 					<div>
-						<TextField id="firstName" label="First Name" variant="outlined"
-							value={userData?.firstName || ''}
-							onChange={handleFieldChange}
-						/>
-						<TextField id="lastName" label="Last Name" variant="outlined"
-							value={userData?.lastName || ''}
-							onChange={handleFieldChange}
-						/>
+						{freeTextField("firstName", "First Name")}
+						{freeTextField("lastName", "Last Name")}
 					</div>
 					<div>
 						<TextField id="outlined-select-dept" select label="Department" >
@@ -116,6 +131,15 @@ function UserView() {
 							))}
 						</TextField>
 						<TextField id="outlined-select-rank" select label="Rank">
+							{placeholder.map((option) => (
+							<MenuItem key={option.value} value={option.value}>
+								{option.label}
+							</MenuItem>
+							))}
+						</TextField>
+					</div>
+					<div>
+						<TextField id="outlined-select-load" select label="Load">
 							{placeholder.map((option) => (
 							<MenuItem key={option.value} value={option.value}>
 								{option.label}
@@ -134,15 +158,9 @@ function UserView() {
 				</Collapse>
 			</Box>
 		
-			<Box sx={{ fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 }}>
+			<Box sx={mainBoxFormat}>
 				Scholarly/Academic Information
-				<IconButton
-					aria-label="expand row"
-					size="small"
-					onClick={() => setOpen2(!open2)}
-				>
-					{open2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-				</IconButton>
+				<ExpandCollapseButton isOpen={open2} onClick={() => setOpen2(!open2)} />
 				<Collapse in={open2} timeout="auto" unmountOnExit>
 					<Box
 						component="form"
@@ -151,32 +169,27 @@ function UserView() {
 						autoComplete="off"
 					>
 					<div>	
-						<TextField id="journals" label="Journals" type="number" variant="outlined"
-							value={userData?.journals || ''}
-							onChange={handleINTChange}
-						/>
-						<TextField id="books" label="Books" type="number" variant="outlined"
-							value={userData?.books || ''}
-							onChange={handleINTChange}
-						/>
-						<TextField id="chapters" label="Chapters" type="number" variant="outlined"
-							value={userData?.chapters || ''}
-							onChange={handleINTChange}
-						/>
+						{intField("journals", "Journals")}
+						{intField("books", "Books")}
+						{intField("chapters", "Chapters")}
 					</div>
 					<div>
-						<TextField id="conferences" label="Conferences" type="number" variant="outlined"
-							value={userData?.conferences || ''}
-							onChange={handleINTChange}
-						/>
-						<TextField id="grants" label="Awards" type="number" variant="outlined"
-							value={userData?.grants || ''}
-							onChange={handleINTChange}
-						/>
-						<TextField id="patentInnovation" label="Patents/Innovations" type="number" variant="outlined"
-							value={userData?.patentInnovation || ''}
-							onChange={handleINTChange}
-						/>
+						{intField("conferences", "Conferences")}
+						{intField("patentInnovation", "Patents/Innovations")}
+					</div>
+					<div>
+						{intField("phdAdvised", "PhD Advised")}
+						{intField("phdCompleted", "PhD Completed")}
+						{intField("msCompleted", "Masters Completed")}
+					</div>
+					<div>
+						{intField("ugMentored", "Undergraduate Student Research Mentored")}
+						{intField("researchExperienceStudents", "Research Experience Students")}
+						{intField("researchExperienceTotal", "Research Experience Total")}
+					</div>
+					<div>
+						{intField("grants", "Grants", "$K")}
+						{intField("awards", "Awards")}
 					</div>
 					</Box>
 				</Collapse>

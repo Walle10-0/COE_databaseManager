@@ -74,6 +74,9 @@ public class User {
 
     @Column(name = "grants", table = "research_scholarly")
     private Long grants;
+	
+	@Column(name = "awards", table = "research_scholarly")
+    private Long awards;
 
     @Column(name = "res_exp_total", table = "research_scholarly")
     private Long researchExperienceTotal;
