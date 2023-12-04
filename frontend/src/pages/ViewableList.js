@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet, Link } from "react-router-dom";
 
 const fakedata = [
 	{ name: "User" },
@@ -18,7 +19,13 @@ const viewableList = () => {
 					{fakedata.map((val, key) => {
 						return (
 							<tr key={key}>
-								<td>{val.name}</td>
+							<td>
+							<nav>
+							<ul>
+							<Link to="/UserView">{val.name}</Link>
+							</ul>
+							</nav>
+							</td>
 							</tr>
 						)
 					})}
