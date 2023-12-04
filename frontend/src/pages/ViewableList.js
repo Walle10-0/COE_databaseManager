@@ -1,38 +1,70 @@
-import React from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Outlet, Link } from "react-router-dom";
+import CsvDownloadButton from 'react-json-to-csv'
 
-const fakedata = [
-	{ name: "User" },
-	{ name: "Test" },
-	{ name: "Blargh" },
-	{ name: "Guy" },
-]
-
-const viewableList = () => {
+function ViewableList() {
+	const [userData, setUserData] = useState(null);
+	const deptNum = 3;
+	
+	const fakedata = [
+		{ name: "User" },
+		{ name: "Test" },
+		{ name: "Blargh" },
+		{ name: "Guy" },
+	]
+	
+	useEffect(() => {	
+		fetchData();
+	}, []);
+	
+	const fetchData = async () => {
+      try {
+        const response = await fetch('api/department/' + deptNum + '/users');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+	
 	return (
 		<>
 			<div>
+				<CsvDownloadButton data={userData} delimiter=',' />
 				<center><table className = "List">
 					<tr>
 						<th><h3>Select Faculty to View</h3></th>
 					</tr>
-					{fakedata.map((val, key) => {
-						return (
-							<tr key={key}>
-							<td>
-							<nav>
-							<ul>
-							<Link to="/UserView">{val.name}</Link>
-							</ul>
-							</nav>
-							</td>
-							</tr>
-						)
-					})}
+					{userData ? (
+						userData.map((user, key) => {
+							return (
+								<tr key={key}>
+									<td>
+										<nav>
+											<ul>
+												<Link to="/UserView">{user.firstName} {user.lastName}</Link>
+											</ul>
+										</nav>
+									</td>
+								</tr>
+							)
+						})
+					) : (
+						<tr>Loading...</tr>
+					)}
 				</table></center>
 			</div>
+			<h1>RAW JSON Data</h1>
+			{userData ? (
+				<pre>{JSON.stringify(userData, null, 2)}</pre>
+				) : (
+				<p>Loading...</p>
+			)}
 		</>
 	);
 };
 
-export default viewableList;
+export default ViewableList;
