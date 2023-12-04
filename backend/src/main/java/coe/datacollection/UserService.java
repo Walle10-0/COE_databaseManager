@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,11 +18,6 @@ public class UserService {
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-
-        // add logic for setting roles...
-
-        // Implement validation and processing logic...
-
         user = UserRepository.save(user);
         return convertToDTO(user);
     }
@@ -94,7 +88,6 @@ public class UserService {
 	// bulk convert
 	private List<UserDTO> convertToDTO(List<User> user) {
         List<UserDTO> DTOList = new ArrayList<UserDTO>();
-		
         for (User current : user) {
 			DTOList.add(convertToDTO(current));
 		}
@@ -108,32 +101,32 @@ public class UserService {
         user.setUserId(dto.getId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-		//user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+
+		    //user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
         //user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
-		/*
-		userDTO.setLoad(user.getLoad().getLoad());
-		userDTO.setRank(user.getRank().getRank());
-		userDTO.setStatus(user.getStatus().getStatus());
+		    /*
+		    userDTO.setLoad(user.getLoad().getLoad());
+		    userDTO.setRank(user.getRank().getRank());
+		    userDTO.setStatus(user.getStatus().getStatus());
 		
-		userDTO.setJournals(user.getJournals());
-		userDTO.setConferences(user.getConferences());
-		userDTO.setBooks(user.getBooks());
-		userDTO.setChapters(user.getChapters());
-		userDTO.setGrants(user.getGrants());
-		userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
-		userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
-		userDTO.setPhdAdvised(user.getPhdAdvised());
-		userDTO.setPhdCompleted(user.getPhdCompleted());
-		userDTO.setMsCompleted(user.getMsCompleted());
-		userDTO.setPatentInnovation(user.getPatentInnovation());
-		userDTO.setUgMentored(user.getUgMentored());*/
+		    userDTO.setJournals(user.getJournals());
+		    userDTO.setConferences(user.getConferences());
+		    userDTO.setBooks(user.getBooks());
+		    userDTO.setChapters(user.getChapters());
+		    userDTO.setGrants(user.getGrants());
+		    userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
+		    userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
+		    userDTO.setPhdAdvised(user.getPhdAdvised());
+		    userDTO.setPhdCompleted(user.getPhdCompleted());
+		    userDTO.setMsCompleted(user.getMsCompleted());
+		    userDTO.setPatentInnovation(user.getPatentInnovation());
+		    userDTO.setUgMentored(user.getUgMentored());*/
 		
-		user.setTeaching(dto.getTeaching());
-		user.setClasses(dto.getClasses());
-		user.setServiceActivity(dto.getServiceActivity());
+		    user.setTeaching(dto.getTeaching());
+		    user.setClasses(dto.getClasses());
+		    user.setServiceActivity(dto.getServiceActivity());
 
         // set anything else ...
-
         return user;
     }
 
@@ -145,12 +138,6 @@ public class UserService {
         }
         return null;
     }
-
-    // // export all users to JSON
-    // public String exportAllUsersToJSON() throws Exception {
-    // List<UserDTO> userDTOs = getAllUsers();
-    // return ExportUtility.exportToJSON(userDTOs);
-    // }
 	
 	public List<UserDTO> findUsersByDepartmentId(int id) {
 		return convertToDTO(UserRepository.findUsersByDepartmentId(id));

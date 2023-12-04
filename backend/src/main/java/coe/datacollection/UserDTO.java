@@ -1,5 +1,9 @@
 package coe.datacollection;
 
+import coe.datacollection.EntityDependencies.Teaching;
+import coe.datacollection.EntityDependencies.UClasses;
+import coe.datacollection.EntityDependencies.UServices;
+
 import java.util.List;
 
 import lombok.Data;
