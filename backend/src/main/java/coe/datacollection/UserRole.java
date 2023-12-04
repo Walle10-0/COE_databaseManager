@@ -1,7 +1,6 @@
 package coe.datacollection;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "_user_role")
