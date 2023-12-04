@@ -10,7 +10,7 @@ public class UserDTO {
     private Long id;
     private String lastName;
     private String firstName;
-	private String departmentName;
+	private String department;
 	private String roleName;
 	
 	// feilds from general_info
