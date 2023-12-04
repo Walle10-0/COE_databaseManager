@@ -10,11 +10,6 @@ const fakedata = [
 const viewableList = () => {
 	return (
 		<>
-			<div className="Title">
-				<h1>Embry-Riddle Aeronautical University</h1>
-				<h2>Faculty Information Repository</h2>
-			</div>
-	
 			<div>
 				<center><table className = "List">
 					<tr>

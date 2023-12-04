@@ -1,4 +1,4 @@
-package coe.datacollection;
+package coe.datacollection.EntityDependencies;
 
 import jakarta.persistence.*;
 

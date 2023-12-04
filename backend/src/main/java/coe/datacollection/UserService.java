@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,11 +15,6 @@ public class UserService {
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-
-        // add logic for setting roles...
-
-        // Implement validation and processing logic...
-
         user = UserRepository.save(user);
         return convertToDTO(user);
     }
@@ -92,7 +86,6 @@ public class UserService {
 	// use lookups instead
 	private List<UserDTO> convertToDTO(List<User> user) {
         List<UserDTO> DTOList = new ArrayList<UserDTO>();
-		
         for (User current : user) {
 			DTOList.add(convertToDTO(current));
 		}
@@ -106,9 +99,6 @@ public class UserService {
         user.setUserId(dto.getId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-
-        // set anything else ...
-
         return user;
     }
 
@@ -120,12 +110,6 @@ public class UserService {
         }
         return null;
     }
-
-    // // export all users to JSON
-    // public String exportAllUsersToJSON() throws Exception {
-    // List<UserDTO> userDTOs = getAllUsers();
-    // return ExportUtility.exportToJSON(userDTOs);
-    // }
 	
 	public List<UserDTO> findUsersByDepartmentId(int id) {
 		return convertToDTO(UserRepository.findUsersByDepartmentId(id));
