@@ -10,6 +10,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository UserRepository;
+	
+	@Autowired
+	private GenericRepository genericRepository;
 
     // create a new user
     public UserDTO createUser(UserDTO userDTO) {
@@ -61,7 +64,7 @@ public class UserService {
         userDTO.setId(user.getUserId());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-		userDTO.setDepartmentName(user.getDepartment().getDepartment());
+		userDTO.setDepartment(user.getDepartment().getDepartment());
         userDTO.setRoleName(user.getUserRole().getRoleName());
 		
 		userDTO.setLoad(user.getLoad().getLoad());
@@ -88,8 +91,7 @@ public class UserService {
         return userDTO;
     }
 	
-	// we should avoid this function
-	// use lookups instead
+	// bulk convert
 	private List<UserDTO> convertToDTO(List<User> user) {
         List<UserDTO> DTOList = new ArrayList<UserDTO>();
 		
@@ -106,6 +108,29 @@ public class UserService {
         user.setUserId(dto.getId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+		//user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+        //user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
+		/*
+		userDTO.setLoad(user.getLoad().getLoad());
+		userDTO.setRank(user.getRank().getRank());
+		userDTO.setStatus(user.getStatus().getStatus());
+		
+		userDTO.setJournals(user.getJournals());
+		userDTO.setConferences(user.getConferences());
+		userDTO.setBooks(user.getBooks());
+		userDTO.setChapters(user.getChapters());
+		userDTO.setGrants(user.getGrants());
+		userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
+		userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
+		userDTO.setPhdAdvised(user.getPhdAdvised());
+		userDTO.setPhdCompleted(user.getPhdCompleted());
+		userDTO.setMsCompleted(user.getMsCompleted());
+		userDTO.setPatentInnovation(user.getPatentInnovation());
+		userDTO.setUgMentored(user.getUgMentored());*/
+		
+		user.setTeaching(dto.getTeaching());
+		user.setClasses(dto.getClasses());
+		user.setServiceActivity(dto.getServiceActivity());
 
         // set anything else ...
 

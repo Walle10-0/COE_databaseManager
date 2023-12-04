@@ -10,7 +10,7 @@ public class UserDTO {
     private Long id;
     private String lastName;
     private String firstName;
-	private String departmentName;
+	private String department;
 	private String roleName;
 	
 	// feilds from general_info
@@ -24,6 +24,7 @@ public class UserDTO {
     private int books;
     private int chapters;
     private Long grants;
+	private Long awards;
     private Long researchExperienceTotal;
     private Long researchExperienceStudents;
     private int phdAdvised;
