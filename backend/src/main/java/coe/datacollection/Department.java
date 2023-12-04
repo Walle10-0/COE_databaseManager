@@ -1,8 +1,6 @@
 package coe.datacollection;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "_dept", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})

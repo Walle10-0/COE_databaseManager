@@ -1,8 +1,11 @@
 package coe.datacollection;
 
-import coe.datacollection.Teaching;
-import coe.datacollection.UClasses;
-import coe.datacollection.UServices;
+import coe.datacollection.EntityDependencies.Teaching;
+import coe.datacollection.EntityDependencies.UClasses;
+import coe.datacollection.EntityDependencies.UServices;
+import coe.datacollection.EntityDependencies.CLoad;
+import coe.datacollection.EntityDependencies.URank;
+import coe.datacollection.EntityDependencies.UStatus;
 
 import jakarta.persistence.*;
 
@@ -10,7 +13,6 @@ import lombok.Data;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
@@ -74,6 +76,9 @@ public class User {
 
     @Column(name = "grants", table = "research_scholarly")
     private Long grants;
+	
+	@Column(name = "awards", table = "research_scholarly")
+    private Long awards;
 
     @Column(name = "res_exp_total", table = "research_scholarly")
     private Long researchExperienceTotal;
@@ -108,5 +113,4 @@ public class User {
 	@JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UServices> serviceActivity;
-
 }
