@@ -6,13 +6,6 @@ function ViewableList() {
 	const [userData, setUserData] = useState(null);
 	const deptNum = 3;
 	
-	const fakedata = [
-		{ name: "User" },
-		{ name: "Test" },
-		{ name: "Blargh" },
-		{ name: "Guy" },
-	]
-	
 	useEffect(() => {	
 		fetchData();
 	}, []);
@@ -45,7 +38,7 @@ function ViewableList() {
 									<td>
 										<nav>
 											<ul>
-												<Link to="/UserView">{user.firstName} {user.lastName}</Link>
+												<Link to="/UserView" state={{ userNum: user.id }}>{user.firstName} {user.lastName}</Link>
 											</ul>
 										</nav>
 									</td>

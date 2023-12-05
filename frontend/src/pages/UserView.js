@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import './App.css';
 import ExpandCollapseButton from './ExpandCollapseButton';
+import { useLocation } from 'react-router-dom';
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment } from '@mui/material';
 
@@ -28,14 +29,13 @@ import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment 
 		},];
 
 function UserView() {
+	const { state } = useLocation();
 	const [open1, setOpen1] = React.useState(false);
 	const [open2, setOpen2] = React.useState(false);
 	const [userData, setUserData] = useState(null);
-	const userNum = 12;
+	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
-	const subBoxFormat = { 
-						
-						};
+	
 
 	useEffect(() => {	
 		fetchData();
@@ -108,6 +108,7 @@ function UserView() {
 	
 		<div>
 			<center>
+			<h1>{userData?.firstName} {userData?.lastName}</h1>
 			<Box sx={mainBoxFormat}>
 				General Information
 				<ExpandCollapseButton isOpen={open1} onClick={() => setOpen1(!open1)} />
