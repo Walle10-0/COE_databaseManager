@@ -1,9 +1,17 @@
 import React, { Component, useState, useEffect } from 'react';
 import './App.css';
 import ExpandCollapseButton from './ExpandCollapseButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 import { useLocation } from 'react-router-dom';
 
-import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment } from '@mui/material';
+import { TextField, Box, Collapse, Select, MenuItem, InputLabel, InputAdornment } from '@mui/material';
 
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
@@ -32,41 +40,26 @@ function UserView() {
 	const { state } = useLocation();
 	const [open1, setOpen1] = React.useState(false);
 	const [open2, setOpen2] = React.useState(false);
+	const [open3, setOpen3] = React.useState(false);
 	const [userData, setUserData] = useState(null);
-	const [dropdownData, setDropdownData] = useState(null);
-	const dropdownNames = [
-		'department',
-		'load',
-		'rank',
-		'status',
-		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
 	
 
-	useEffect(() => {
-		async function fetchDataAndSetState() {
-			const fetchedUserData = await fetchData('api/user/' + userNum);
-			setUserData(fetchedUserData);
-			
-			const fetchedDropdowns = await Promise.all(
-				dropdownNames.map((name) => fetchData('api/allValues/' + name)));
-			setDropdownData(fetchedDropdowns);
-		}
-		fetchDataAndSetState();
+	useEffect(() => {	
+		fetchData();
 	}, []);
 	
-	const fetchData = async (url) => {
+	const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await fetch('api/user/' + userNum);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-		return await response.json();
-		
+        const data = await response.json();
+        setUserData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
-		return null;
       }
     };
 	
@@ -94,33 +87,6 @@ function UserView() {
 			console.error('Error writing data:', error);
 		}
 	};
-	
-	const handleDropdownChange = (event, id) => {
-		const value = event.target.value;
-
-		// Update the state for dropdown values directly
-		setUserData((prevData) => ({
-			...prevData,
-			[id]: value,
-		}));
-	};
-	
-	const dropdownField = (id, label) => (
-		<TextField
-			id={id}
-			select
-			label={label}
-			variant="outlined"
-			onChange={(event) => handleDropdownChange(event, id)}
-			value={userData?.[id] || ''}
-		>
-		{(dropdownData?.length > 0) ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
-			<MenuItem key={option} value={option}>
-				{option}
-			</MenuItem>
-		)) : null}
-		</TextField>
-	);
 	
 	const freeTextField = (id, label) => (
 		<TextField
@@ -167,13 +133,36 @@ function UserView() {
 						{freeTextField("lastName", "Last Name")}
 					</div>
 					<div>
-						{dropdownField("department", "Department")}
-						{dropdownField("rank", "Rank")}
-						<TextField id="outlined-select-role" disabled label="User Role" value={userData?.roleName || ''} />
+						<TextField id="outlined-select-dept" select label="Department" >
+							{placeholder.map((option) => (
+							<MenuItem key={option.value} value={option.value}>
+								{option.label}
+							</MenuItem>
+							))}
+						</TextField>
+						<TextField id="outlined-select-rank" select label="Rank">
+							{placeholder.map((option) => (
+							<MenuItem key={option.value} value={option.value}>
+								{option.label}
+							</MenuItem>
+							))}
+						</TextField>
 					</div>
 					<div>
-						{dropdownField("load", "Load")}
-						{dropdownField("status", "Status")}
+						<TextField id="outlined-select-load" select label="Load">
+							{placeholder.map((option) => (
+							<MenuItem key={option.value} value={option.value}>
+								{option.label}
+							</MenuItem>
+							))}
+						</TextField>
+						<TextField id="outlined-select-NTFSDA" select label="NTFSDA">
+							{placeholder.map((option) => (
+							<MenuItem key={option.value} value={option.value}>
+								{option.label}
+							</MenuItem>
+							))}
+						</TextField>
 					</div>
 					</Box>
 				</Collapse>
@@ -215,8 +204,84 @@ function UserView() {
 					</Box>
 				</Collapse>
 			</Box>
+
+			<Box sx={mainBoxFormat}>
+				Teaching Records
+				<ExpandCollapseButton isOpen={open3} onClick={() => setOpen3(!open3)} />
+				<Collapse in={open3} timeout="auto" unmountOnExit>
+				
+{/*Start of example*/}
+				<h5>Classes Taught</h5>
+				<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+						<TableHead>
+							<TableRow>
+								<TableCell>Class Name:</TableCell>
+								<TableCell align="right">Semester</TableCell>
+								<TableCell align="right">Level</TableCell>
+								<TableCell align="right">Credits</TableCell>
+								<TableCell align="right">Students</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+						
+						{/*Start of table contents - Reading JSON in here?*/}
+						{UserView?.classes?.map((row) => (
+							<TableRow
+							key={row.className}
+								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+							>
+								<TableCell component="th" scope="row">
+									{row.className}
+								</TableCell>
+							<TableCell align="right">{row.fullName}</TableCell>
+							<TableCell align="right">{row.classType}</TableCell>
+							<TableCell align="right">{row.creditHours}</TableCell>
+							<TableCell align="right">{row.students}</TableCell>
+							</TableRow>
+					))}
+					</TableBody>
+					</Table>
+					</TableContainer>
+{/*End of example*/}
+
+{/*Start of example*/}
+				<h5>Other Stuff</h5>
+				<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+						<TableHead>
+							<TableRow>
+								<TableCell>Semester:</TableCell>
+								<TableCell align="right">NewPreps</TableCell>
+								<TableCell align="right">NewDevs</TableCell>
+								<TableCell align="right">Overloads</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+						
+						{/*Start of table contents - Reading JSON in here?*/}
+						{UserView?.teaching?.map((row) => (
+							<TableRow
+							key={row.fullName}
+								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+							>
+								<TableCell component="th" scope="row">
+									{row.fullName}
+								</TableCell>
+							<TableCell align="right">{row.newPreps}</TableCell>
+							<TableCell align="right">{row.newDevs}</TableCell>
+							<TableCell align="right">{row.overloads}</TableCell>
+							</TableRow>
+					))}
+					</TableBody>
+					</Table>
+					</TableContainer>
+{/*End of example*/}
+					
+				</Collapse>
+			</Box>
 			</center>
-			</div>
+		</div>
 			
 			<div>
       <h1>RAW JSON Data</h1>
