@@ -77,6 +77,7 @@ public class UserService {
 		userDTO.setMsCompleted(user.getMsCompleted());
 		userDTO.setPatentInnovation(user.getPatentInnovation());
 		userDTO.setUgMentored(user.getUgMentored());
+		userDTO.setAwards(user.getAwards());
 		
 		userDTO.setTeaching(user.getTeaching());
 		userDTO.setClasses(user.getClasses());
@@ -102,25 +103,25 @@ public class UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
 
-		//user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()).get(0));
-        //user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
-		    /*
-		    userDTO.setLoad(user.getLoad().getLoad());
-		    userDTO.setRank(user.getRank().getRank());
-		    userDTO.setStatus(user.getStatus().getStatus());
+		user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+        user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
+		user.setLoad(genericRepository.findByString("CLoad", "load", dto.getLoad()));
+		user.setRank(genericRepository.findByString("URank", "rank", dto.getRank()));
+		user.setStatus(genericRepository.findByString("UStatus", "status", dto.getStatus()));
 		
-		    userDTO.setJournals(user.getJournals());
-		    userDTO.setConferences(user.getConferences());
-		    userDTO.setBooks(user.getBooks());
-		    userDTO.setChapters(user.getChapters());
-		    userDTO.setGrants(user.getGrants());
-		    userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
-		    userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
-		    userDTO.setPhdAdvised(user.getPhdAdvised());
-		    userDTO.setPhdCompleted(user.getPhdCompleted());
-		    userDTO.setMsCompleted(user.getMsCompleted());
-		    userDTO.setPatentInnovation(user.getPatentInnovation());
-		    userDTO.setUgMentored(user.getUgMentored());*/
+		user.setJournals(dto.getJournals());
+		user.setConferences(dto.getConferences());
+		user.setBooks(dto.getBooks());
+		user.setChapters(dto.getChapters());
+		user.setGrants(dto.getGrants());
+		user.setResearchExperienceTotal(dto.getResearchExperienceTotal());
+		user.setResearchExperienceStudents(dto.getResearchExperienceStudents());
+		user.setPhdAdvised(dto.getPhdAdvised());
+		user.setPhdCompleted(dto.getPhdCompleted());
+		user.setMsCompleted(dto.getMsCompleted());
+		user.setPatentInnovation(dto.getPatentInnovation());
+		user.setUgMentored(dto.getUgMentored());
+		user.setAwards(dto.getAwards());
 		
 		    user.setTeaching(dto.getTeaching());
 		    user.setClasses(dto.getClasses());

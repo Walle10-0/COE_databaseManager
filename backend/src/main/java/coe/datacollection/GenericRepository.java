@@ -18,11 +18,11 @@ public class GenericRepository {
         return query.getResultList();
     }
 	
-	public <T> List<T> findByString(String entity, String feild, String value) {
+	public <T> T findByString(String entity, String feild, String value) {
         Query query = entityManager.createQuery("SELECT e FROM " + entity + " e WHERE e." + feild + " = :value");
 		query.setParameter("value", value);
-		System.out.println(query.getResultList().get(0).getClass());
-        return query.getResultList();
+		List result = query.getResultList();
+        return (T) (result.isEmpty() ? null : result.get(0));
     }
 
 }

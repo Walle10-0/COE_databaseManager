@@ -21,9 +21,6 @@ public class MainController {
 
   @Autowired // This means to get the bean called departmentRepository
   private DepartmentRepository departmentRepository;
-  
-  @Autowired
-  private GenericRepository genericRepository;
 
   // This returns a JSON or XML with the users
   @GetMapping("/users")
@@ -43,10 +40,10 @@ public class MainController {
     return new ResponseEntity<>(userService.getAllValues(name), HttpStatus.OK);
   }
   
-  // for debugging
-  @GetMapping("/department/{name}")
-  public ResponseEntity<List<Department>> getDepartmentofName(@PathVariable String name) {
-	return new ResponseEntity<>(genericRepository.findByString("Department", "deptName", name), HttpStatus.OK);
+  @GetMapping("/test/user/{id}")
+  public ResponseEntity<User> testgetUser(@PathVariable Long id) {
+    System.out.println("Retrieved user : " + id);
+	return new ResponseEntity<>(userService.convertFromDTO(userService.getUser(id)), HttpStatus.OK);
   }
 
   // This returns a JSON or XML with the users of a single department

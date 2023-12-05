@@ -98,11 +98,11 @@ function UserView() {
 			onChange={(event) => handleDropdownChange(event, id)}
 			value={userData?.[id] || ''}
 		>
-		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)] ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
+		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)]?.map((option) => (
 			<MenuItem key={option} value={option}>
 				{option}
 			</MenuItem>
-		)) : null) : null}
+		))) : null}
 		</TextField>
 	);
 	
