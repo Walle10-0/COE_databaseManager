@@ -38,11 +38,12 @@ public class MainController {
     return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
   }
   
-  @GetMapping("/departmentNames")
-  public ResponseEntity<List<String>> getAllDepartmentNames() {
-    return new ResponseEntity<>(genericRepository.findStringVals("Department", "deptName"), HttpStatus.OK);
+  @GetMapping("/allValues/{name}")
+  public ResponseEntity<List<String>> getAllValues(@PathVariable String name) {
+    return new ResponseEntity<>(userService.getAllValues(name), HttpStatus.OK);
   }
   
+  // for debugging
   @GetMapping("/department/{name}")
   public ResponseEntity<List<Department>> getDepartmentofName(@PathVariable String name) {
 	return new ResponseEntity<>(genericRepository.findByString("Department", "deptName", name), HttpStatus.OK);

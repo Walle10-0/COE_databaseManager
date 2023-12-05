@@ -142,4 +142,28 @@ public class UserService {
 	public List<UserDTO> findUsersByDepartmentId(int id) {
 		return convertToDTO(UserRepository.findUsersByDepartmentId(id));
 	}
+	
+	// get All Values for dropdown
+	public List<String> getAllValues(String name)
+	{
+		List<String> result;
+		switch (name) {
+			case "department":
+				result = genericRepository.findStringVals("Department", "deptName");
+				break;
+			case "load":
+				result = genericRepository.findStringVals("CLoad", "load");
+				break;
+			case "rank":
+				result = genericRepository.findStringVals("URank", "rank");
+				break;
+			case "status":
+				result = genericRepository.findStringVals("UStatus", "status");
+				break;
+			default:
+				result = new ArrayList<String>();
+				break;
+		}
+		return result;
+	}
 }

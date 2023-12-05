@@ -33,24 +33,41 @@ function UserView() {
 	const [open1, setOpen1] = React.useState(false);
 	const [open2, setOpen2] = React.useState(false);
 	const [userData, setUserData] = useState(null);
+	const [dropdownData, setDropdownData] = useState(null);
+	const dropdownNames = [
+		'department',
+		'load',
+		'rank',
+		'status',
+		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
 	
 
-	useEffect(() => {	
-		fetchData();
+	useEffect(() => {
+		async function fetchDataAndSetState() {
+			const fetchedUserData = await fetchData('api/user/' + userNum);
+			setUserData(fetchedUserData);
+			
+			const fetchedDropdowns = await Promise.all(
+				dropdownNames.map((name) => fetchData('api/allValues/' + name)));
+			setDropdownData(fetchedDropdowns);
+		}
+		
+		fetchDataAndSetState();
 	}, []);
 	
-	const fetchData = async () => {
+	const fetchData = async (url) => {
       try {
-        const response = await fetch('api/user/' + userNum);
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        setUserData(data);
+		return await response.json();
+		
       } catch (error) {
         console.error('Error fetching data:', error);
+		return null;
       }
     };
 	
@@ -78,6 +95,23 @@ function UserView() {
 			console.error('Error writing data:', error);
 		}
 	};
+	
+	const dropdownField = (id, label) => (
+		<TextField
+			id={id}
+			select
+			label={label}
+			variant="outlined"
+			value={userData?.[id] || ''}
+			onChange={handleFieldChange}
+		>
+		{(dropdownData?.length > 0) ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
+			<MenuItem key={option} value={option}>
+				{option}
+			</MenuItem>
+		)) : null}
+		</TextField>
+	);
 	
 	const freeTextField = (id, label) => (
 		<TextField
@@ -124,36 +158,13 @@ function UserView() {
 						{freeTextField("lastName", "Last Name")}
 					</div>
 					<div>
-						<TextField id="outlined-select-dept" select label="Department" >
-							{placeholder.map((option) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-							))}
-						</TextField>
-						<TextField id="outlined-select-rank" select label="Rank">
-							{placeholder.map((option) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-							))}
-						</TextField>
+						{dropdownField("department", "Department")}
+						{dropdownField("rank", "Rank")}
+						<TextField id="outlined-select-role" disabled label="User Role" value={userData?.roleName || ''} />
 					</div>
 					<div>
-						<TextField id="outlined-select-load" select label="Load">
-							{placeholder.map((option) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-							))}
-						</TextField>
-						<TextField id="outlined-select-NTFSDA" select label="NTFSDA">
-							{placeholder.map((option) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-							))}
-						</TextField>
+						{dropdownField("load", "Load")}
+						{dropdownField("status", "Status")}
 					</div>
 					</Box>
 				</Collapse>
