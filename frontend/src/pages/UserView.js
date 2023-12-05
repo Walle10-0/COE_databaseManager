@@ -15,6 +15,7 @@ function UserView() {
 	const [open1, setOpen1] = React.useState(false);
 	const [open2, setOpen2] = React.useState(false);
 	const [open3, setOpen3] = React.useState(false);
+	const [open4, setOpen4] = React.useState(false);
 	const [userData, setUserData] = useState(null);
 	const [dropdownData, setDropdownData] = useState(null);
 	const dropdownNames = [
@@ -210,7 +211,7 @@ function UserView() {
 							<TableRow>
 								<TableCell>Class Name:</TableCell>
 								<TableCell align="right">Semester</TableCell>
-								<TableCell align="right">Level</TableCell>
+								<TableCell align="right">Class Type</TableCell>
 								<TableCell align="right">Credits</TableCell>
 								<TableCell align="right">Students</TableCell>
 							</TableRow>
@@ -227,7 +228,7 @@ function UserView() {
 								</TableCell>
 							<TableCell align="right">{row.semester.fullName}</TableCell>
 							<TableCell align="right">{row.catalog.classType.classType}</TableCell>
-							<TableCell align="right">{row.creditHours}</TableCell>
+							<TableCell align="right">{row.catalog.creditHours}</TableCell>
 							<TableCell align="right">{row.students}</TableCell>
 							</TableRow>
 					))) : null}
@@ -266,6 +267,39 @@ function UserView() {
 					</TableContainer>
 {/*End of example*/}
 					
+				</Collapse>
+			</Box>
+			<Box sx={mainBoxFormat}>
+				Service Activity
+				<ExpandCollapseButton isOpen={open4} onClick={() => setOpen4(!open4)} />
+				<Collapse in={open4} timeout="auto" unmountOnExit>
+
+				<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 650, fontSize: 30}} size="small" aria-label="a dense table">
+						<TableHead>
+							<TableRow>
+								<TableCell>Semester:</TableCell>
+								<TableCell align="right">Description</TableCell>
+								<TableCell align="right">Level</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+						
+						{/*Start of table contents - Reading JSON in here? yes*/}
+						{userData ? (userData.serviceActivity?.map((row, i) => (
+							<TableRow
+							key={i}
+							>
+								<TableCell component="th" scope="row">
+									{row.semester.fullName}
+								</TableCell>
+							<TableCell align="right">{row.description}</TableCell>
+							<TableCell align="right">{row.level.level}</TableCell>
+							</TableRow>
+					))) : null}
+					</TableBody>
+					</Table>
+					</TableContainer>
 				</Collapse>
 			</Box>
 			</center>

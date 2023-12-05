@@ -12,7 +12,7 @@ const Layout = () => {
             <Link to="/userView">userView</Link>
           </li>
 		  <li>
-			<Link to="/viewableList">viewableList</Link>
+			<Link to="/userList">viewableList</Link>
 			</li>
 			
 			

@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { Outlet, Link } from "react-router-dom";
 import CsvDownloadButton from 'react-json-to-csv'
 
-function ViewableList() {
+function UserList() {
 	const [userData, setUserData] = useState(null);
 	const deptNum = 3;
 	
@@ -60,4 +60,4 @@ function ViewableList() {
 	);
 };
 
-export default ViewableList;
+export default UserList;

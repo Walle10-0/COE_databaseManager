@@ -160,6 +160,9 @@ public class UserService {
 			case "status":
 				result = genericRepository.findStringVals("UStatus", "status");
 				break;
+			case "semester":
+				result = genericRepository.findStringVals("Semester", "fullName");
+				break;
 			default:
 				result = new ArrayList<String>();
 				break;
