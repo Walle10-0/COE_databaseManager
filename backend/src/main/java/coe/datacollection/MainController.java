@@ -8,44 +8,63 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class MainController {
-  //@Autowired // This means to get the bean called userRepository
-  //private UserRepository userRepository;
-  
-  @Autowired //  Automatically gets userService
-  private UserService userService;
+    //@Autowired // This means to get the bean called userRepository
+    //private UserRepository userRepository;
+    @Autowired //  Automatically gets userService
+    private UserService userService;
+    @Autowired // This means to get the bean called departmentRepository
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private GenericRepository genericRepository;
 
-  @Autowired // This means to get the bean called departmentRepository
-  private DepartmentRepository departmentRepository;
+    // This returns a JSON or XML with the users
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List <UserDTO> allUsers = new ArrayList<>();
+        List<String> deptNames = departmentRepository.getNames();
+        for (String name : deptNames) {
+          List<UserDTO> usersInDept = userService.getAllUsers(name);
+          if (usersInDept != null) {
+              allUsers.addAll(usersInDept); // Add users from each department
+          }
+        }
+        System.out.println("Retrieved all users");
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
 
-  // This returns a JSON or XML with the users
-  @GetMapping("/users")
-  public ResponseEntity<List<UserDTO>> getAllUsers() {
-	System.out.println("Retrieved all users");
-	return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-  }
+    // neccesary?
+    @GetMapping("/departments")
+    public ResponseEntity<List<Department>> getAllDepartments() {
+      return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
+    }
+    
+    @GetMapping("/departmentNames")
+    public ResponseEntity<List<String>> getAllDepartmentNames() {
+      return new ResponseEntity<>(genericRepository.findStringVals("Department", "deptName"), HttpStatus.OK);
+    }
+    
+    @GetMapping("/department/{name}")
+    public ResponseEntity<List<Department>> getDepartmentofName(@PathVariable String name) {
+    return new ResponseEntity<>(genericRepository.findByString("Department", "deptName", name), HttpStatus.OK);
+    }
 
-  @GetMapping("/departments")
-  public ResponseEntity<List<Department>> getAllDepartments() {
-    return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
-  }
+    // This returns a JSON or XML with the users of a single department
+    @GetMapping("/department/{id}/users")
+    public ResponseEntity<List<UserDTO>> getAllDepartmentUsers(@PathVariable int id) {
+    System.out.println("Retrieved all users from department : " + id);
+    return new ResponseEntity<>(userService.findUsersByDepartmentId(id), HttpStatus.OK);
+    }
 
-  // This returns a JSON or XML with the users of a single department
-  @GetMapping("/department/{id}/users")
-  public ResponseEntity<List<UserDTO>> getAllDepartmentUsers(@PathVariable int id) {
-	System.out.println("Retrieved all users from department : " + id);
-    //return new ResponseEntity<>(userRepository.findUsersByDepartmentId(id), HttpStatus.OK);
-	return new ResponseEntity<>(userService.findUsersByDepartmentId(id), HttpStatus.OK);
-  }
-
-  // This returns a JSON for a single users
-  @GetMapping("/user/{id}")
-  public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-    System.out.println("Retrieved user : " + id);
-	return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
-  }
+    // This returns a JSON for a single users
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+      System.out.println("Retrieved user : " + id);
+    return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+    }
 }

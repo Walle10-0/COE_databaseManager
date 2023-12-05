@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CsvDownloadButton from 'react-json-to-csv'
+import CsvDownloadButton from 'react-json-to-csv';
 
 const MyComponent = () => {
   const [jsonData, setJsonData] = useState(null);
@@ -35,8 +35,8 @@ const MyComponent = () => {
   }
 
   return (
-    <div>
-		<CsvDownloadButton data={jsonData} delimiter=',' />
+    <div style={{ marginLeft: '1in' }}> {/* inline style for left margin */}
+      <CsvDownloadButton data={jsonData} delimiter=',' />
       <h1>JSON Data</h1>
       {jsonData ? (
         <pre>{JSON.stringify(jsonData, null, 2)}</pre>
@@ -48,4 +48,3 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
-

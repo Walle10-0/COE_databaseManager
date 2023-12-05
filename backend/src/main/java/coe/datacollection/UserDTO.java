@@ -14,8 +14,9 @@ public class UserDTO {
     private Long id;
     private String lastName;
     private String firstName;
-	private String departmentName;
+	private String department;
 	private String roleName;
+
 	
 	// feilds from general_info
     private String load;
@@ -41,4 +42,6 @@ public class UserDTO {
 	private List<Teaching> teaching;
     private List<UClasses> classes;
     private List<UServices> serviceActivity;
+
+
 }

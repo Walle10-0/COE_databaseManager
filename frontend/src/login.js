@@ -1,28 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const login = () => {
-	return (
-		<>
-			<div className="Title">
-				<h1>Embry-Riddle Aeronautical University</h1>
-				<h2>Faculty Information Repository</h2>
-			</div>
-	
-			<div>
-				<center><table className = "LoginStatement">
-					<tr>
-						<th><h3>Server Login (test)</h3></th>
-					</tr>
-					<tr>
-						<th><h1>TextFieldGoesHere</h1></th>
-					</tr>
-					<tr>
-						<th><h4>Contact Department Head with issues</h4></th>
-					</tr>
-				</table></center>
-			</div>
-		</>
-	);
+const Login = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState(''); // New state for username
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = () => {
+    // Check both username and password (for demonstration)
+    if (username === 'your_username' && password === 'your_password') {
+      navigate('/');
+    } else {
+      setError('Incorrect username or password. Please try again.');
+    }
+  };
+
+  const navigateToRegistration = () => {
+    navigate('/Registration');
+  };
+
+  const containerStyle = {
+    textAlign: 'center', 
+    marginLeft: 'auto', 
+    marginRight: 'auto', 
+    width: '50%',
+  };
+
+  return (
+    <div style={containerStyle}>
+      <h1>USER LOGIN</h1>
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={navigateToRegistration}>Register</button>
+      {error && <p className="error">{error}</p>}
+    </div>
+  );
 };
 
-export default login;
+export default Login;

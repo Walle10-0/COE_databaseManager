@@ -26,6 +26,10 @@ public class User {
 	@Column(name = "uid", table = "general_info", nullable = false)
     private Long userId;
 
+    public Long getID() {
+        return userId;
+    }
+
     // fields from general_info
     @Column(name = "last_name", table = "general_info")
     private String lastName;
@@ -35,9 +39,15 @@ public class User {
 
     @Column(name = "pin", table = "general_info")
     private char[] pin;
+    String password = new String(pin);
 
-    @Column(name = "salt", table = "general_info")
-    private char[] salt;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin.toCharArray();
+    }
 
     @ManyToOne
     @JoinColumn(name = "_load", table = "general_info")
