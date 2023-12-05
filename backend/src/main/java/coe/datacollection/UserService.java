@@ -102,7 +102,7 @@ public class UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
 
-		    //user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+		//user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()).get(0));
         //user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
 		    /*
 		    userDTO.setLoad(user.getLoad().getLoad());
