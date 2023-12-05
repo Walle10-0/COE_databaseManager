@@ -63,7 +63,8 @@ public class MainController {
   }
   
   @PutMapping("/user/{id}")
-  public void createClient(@PathVariable Long id, @RequestBody UserDTO dto) {
+  public ResponseEntity<UserDTO> createClient(@PathVariable Long id, @RequestBody UserDTO dto) {
 	System.out.println("recieved");
+	return new ResponseEntity<>(userService.updateUser(id, dto), HttpStatus.OK);
   }
 }

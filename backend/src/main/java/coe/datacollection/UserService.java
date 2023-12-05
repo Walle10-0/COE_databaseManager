@@ -34,16 +34,41 @@ public class UserService {
 
     // update an existing user
     public UserDTO updateUser(Long id, UserDTO userDTO) {
-        User user = UserRepository.findById(id)
+        User cUser = UserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id)); // Customize exception as
                                                                                            // needed
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+		User nUser = convertFromDTO(userDTO);
+		System.out.println("id " + id);
+		System.out.println("uid " + cUser.getUserId());
+        cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
+		cUser.setLastName(nUser.getLastName() == null ? cUser.getLastName() : nUser.getLastName());
+		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
+		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
+		
+		cUser.setLoad(nUser.getLoad() == null ? cUser.getLoad() : nUser.getLoad());
+		cUser.setRank(nUser.getRank() == null ? cUser.getRank() : nUser.getRank());
+		cUser.setStatus(nUser.getStatus() == null ? cUser.getStatus() : nUser.getStatus());
+		
+		cUser.setJournals(nUser.getJournals());
+		cUser.setConferences(nUser.getConferences());
+		cUser.setBooks(nUser.getBooks());
+		cUser.setChapters(nUser.getChapters());
+		cUser.setGrants(nUser.getGrants());
+		cUser.setResearchExperienceTotal(nUser.getResearchExperienceTotal());
+		cUser.setResearchExperienceStudents(nUser.getResearchExperienceStudents());
+		cUser.setPhdAdvised(nUser.getPhdAdvised());
+		cUser.setPhdCompleted(nUser.getPhdCompleted());
+		cUser.setMsCompleted(nUser.getMsCompleted());
+		cUser.setPatentInnovation(nUser.getPatentInnovation());
+		cUser.setUgMentored(nUser.getUgMentored());
+		cUser.setAwards(nUser.getAwards());
+		
+		//cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
+		//cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
+		//cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
-        // add anything for updating roles...
-
-        user = UserRepository.save(user);
-        return convertToDTO(user);
+        cUser = UserRepository.save(cUser);
+        return convertToDTO(cUser);
     }
 
     // delete existing user
