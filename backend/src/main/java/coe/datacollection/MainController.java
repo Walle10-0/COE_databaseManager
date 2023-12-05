@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -21,9 +23,6 @@ public class MainController {
 
   @Autowired // This means to get the bean called departmentRepository
   private DepartmentRepository departmentRepository;
-  
-  @Autowired
-  private GenericRepository genericRepository;
 
   // This returns a JSON or XML with the users
   @GetMapping("/users")
@@ -38,14 +37,15 @@ public class MainController {
     return new ResponseEntity<>(departmentRepository.findAll(), HttpStatus.OK);
   }
   
-  @GetMapping("/departmentNames")
-  public ResponseEntity<List<String>> getAllDepartmentNames() {
-    return new ResponseEntity<>(genericRepository.findStringVals("Department", "deptName"), HttpStatus.OK);
+  @GetMapping("/allValues/{name}")
+  public ResponseEntity<List<String>> getAllValues(@PathVariable String name) {
+    return new ResponseEntity<>(userService.getAllValues(name), HttpStatus.OK);
   }
   
-  @GetMapping("/department/{name}")
-  public ResponseEntity<List<Department>> getDepartmentofName(@PathVariable String name) {
-	return new ResponseEntity<>(genericRepository.findByString("Department", "deptName", name), HttpStatus.OK);
+  @GetMapping("/test/user/{id}")
+  public ResponseEntity<User> testgetUser(@PathVariable Long id) {
+    System.out.println("Retrieved user : " + id);
+	return new ResponseEntity<>(userService.convertFromDTO(userService.getUser(id)), HttpStatus.OK);
   }
 
   // This returns a JSON or XML with the users of a single department
@@ -60,5 +60,11 @@ public class MainController {
   public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
     System.out.println("Retrieved user : " + id);
 	return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+  }
+  
+  @PutMapping("/user/{id}")
+  public ResponseEntity<UserDTO> createClient(@PathVariable Long id, @RequestBody UserDTO dto) {
+	System.out.println("recieved");
+	return new ResponseEntity<>(userService.updateUser(id, dto), HttpStatus.OK);
   }
 }
