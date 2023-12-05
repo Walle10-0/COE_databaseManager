@@ -203,7 +203,6 @@ function UserView() {
 				<ExpandCollapseButton isOpen={open3} onClick={() => setOpen3(!open3)} />
 				<Collapse in={open3} timeout="auto" unmountOnExit>
 				
-{/*Start of example*/}
 				<h5>Classes Taught</h5>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -218,25 +217,23 @@ function UserView() {
 						</TableHead>
 						<TableBody>
 						
-						{/*Start of table contents - Reading JSON in here?*/}
-						{UserView?.classes?.map((row) => (
+						{/*Start of table contents - Reading JSON in here? yes*/}
+						{userData ? (userData.classes?.map((row, i) => (
 							<TableRow
-							key={row.className}
-								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+							key={i}
 							>
 								<TableCell component="th" scope="row">
-									{row.className}
+									{row.catalog.className}
 								</TableCell>
-							<TableCell align="right">{row.fullName}</TableCell>
-							<TableCell align="right">{row.classType}</TableCell>
+							<TableCell align="right">{row.semester.fullName}</TableCell>
+							<TableCell align="right">{row.catalog.classType.classType}</TableCell>
 							<TableCell align="right">{row.creditHours}</TableCell>
 							<TableCell align="right">{row.students}</TableCell>
 							</TableRow>
-					))}
+					))) : null}
 					</TableBody>
 					</Table>
 					</TableContainer>
-{/*End of example*/}
 {/*Start of example*/}
 				<h5>Other Stuff</h5>
 				<TableContainer component={Paper}>
@@ -252,19 +249,18 @@ function UserView() {
 						<TableBody>
 						
 						{/*Start of table contents - Reading JSON in here?*/}
-						{UserView?.teaching?.map((row) => (
+						{userData ? (userData.teaching?.map((row, i) => (
 							<TableRow
-							key={row.fullName}
-								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+							key={i}
 							>
 								<TableCell component="th" scope="row">
-									{row.fullName}
+									{row.semester.fullName}
 								</TableCell>
 							<TableCell align="right">{row.newPreps}</TableCell>
 							<TableCell align="right">{row.newDevs}</TableCell>
 							<TableCell align="right">{row.overloads}</TableCell>
 							</TableRow>
-					))}
+					))) : null}
 					</TableBody>
 					</Table>
 					</TableContainer>
