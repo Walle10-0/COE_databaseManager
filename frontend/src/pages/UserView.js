@@ -4,7 +4,8 @@ import ExpandCollapseButton from './ExpandCollapseButton';
 import { useLocation } from 'react-router-dom';
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
-Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@mui/material';
+Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
@@ -53,6 +54,22 @@ function UserView() {
 		return null;
       }
     };
+	
+	// Send data to the backend via POST
+	const postData = async (event) => {
+		
+		console.log("buttno pressed");
+		
+		event.preventDefault();
+		await fetch('api/user' + (userData.id ? '/' + userData.id : ''), {
+        method: (userData.id) ? 'PUT' : 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData, null, 2),
+    });
+	}
 	
 	const handleFieldChange = (event) => {
 		const { id, value } = event.target;
@@ -302,6 +319,9 @@ function UserView() {
 					</TableContainer>
 				</Collapse>
 			</Box>
+			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)}>
+				Submit
+			</Button>
 			</center>
 			</div>
 			

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -58,5 +60,10 @@ public class MainController {
   public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
     System.out.println("Retrieved user : " + id);
 	return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+  }
+  
+  @PutMapping("/user/{id}")
+  public void createClient(@PathVariable Long id, @RequestBody UserDTO dto) {
+	System.out.println("recieved");
   }
 }
