@@ -53,7 +53,6 @@ function UserView() {
 				dropdownNames.map((name) => fetchData('api/allValues/' + name)));
 			setDropdownData(fetchedDropdowns);
 		}
-		
 		fetchDataAndSetState();
 	}, []);
 	
@@ -96,14 +95,24 @@ function UserView() {
 		}
 	};
 	
+	const handleDropdownChange = (event, id) => {
+		const value = event.target.value;
+
+		// Update the state for dropdown values directly
+		setUserData((prevData) => ({
+			...prevData,
+			[id]: value,
+		}));
+	};
+	
 	const dropdownField = (id, label) => (
 		<TextField
 			id={id}
 			select
 			label={label}
 			variant="outlined"
+			onChange={(event) => handleDropdownChange(event, id)}
 			value={userData?.[id] || ''}
-			onChange={handleFieldChange}
 		>
 		{(dropdownData?.length > 0) ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
 			<MenuItem key={option} value={option}>
