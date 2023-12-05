@@ -98,11 +98,11 @@ function UserView() {
 			onChange={(event) => handleDropdownChange(event, id)}
 			value={userData?.[id] || ''}
 		>
-		{(dropdownData?.length > 0) ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
+		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)] ? dropdownData[dropdownNames.indexOf(id)].map((option) => (
 			<MenuItem key={option} value={option}>
 				{option}
 			</MenuItem>
-		)) : null}
+		)) : null) : null}
 		</TextField>
 	);
 	
@@ -219,7 +219,7 @@ function UserView() {
 						<TableBody>
 						
 						{/*Start of table contents - Reading JSON in here? yes*/}
-						{userData ? (userData.classes?.map((row, i) => (
+						{userData && userData?.classes ? (userData.classes.map((row, i) => (
 							<TableRow
 							key={i}
 							>
@@ -250,7 +250,7 @@ function UserView() {
 						<TableBody>
 						
 						{/*Start of table contents - Reading JSON in here?*/}
-						{userData ? (userData.teaching?.map((row, i) => (
+						{userData && userData?.teaching ? (userData.teaching.map((row, i) => (
 							<TableRow
 							key={i}
 							>
@@ -286,7 +286,7 @@ function UserView() {
 						<TableBody>
 						
 						{/*Start of table contents - Reading JSON in here? yes*/}
-						{userData ? (userData.serviceActivity?.map((row, i) => (
+						{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
 							<TableRow
 							key={i}
 							>
