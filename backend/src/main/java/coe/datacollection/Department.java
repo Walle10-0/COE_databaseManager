@@ -13,9 +13,6 @@ public class Department {
     @Column(name = "_dept", nullable = false)
     private String deptName;
 
-    //@OneToMany(mappedBy="department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<User> deptUsers;
-
     // Standard getters and setters
     public int getId() {
         return deptId;

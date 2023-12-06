@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Registration = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -8,8 +9,9 @@ const Registration = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [rank, setRank] = useState(''); // State for rank
-  const [department, setDepartment] = useState(''); // State for department
+  const [rank, setRank] = useState(''); 
+  const [department, setDepartment] = useState(''); 
+  const [role, setRole] = useState(''); 
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +42,7 @@ const Registration = () => {
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, firstName, lastName, rank, department }),
+        body: JSON.stringify({ username, password, firstName, lastName, rank, department, role }),
       });
 
       if (response.status === 201) {
@@ -53,6 +55,7 @@ const Registration = () => {
     } finally {
       setIsLoading(false);
     }
+    
   };
 
   // Styles
@@ -85,6 +88,17 @@ const Registration = () => {
           />
         </div>
 
+        {/* Username Field (Read-Only) */}
+        <div style={inlineGroupStyle}>
+          <label style={labelStyle}>Username: </label>
+          <input
+            type="text"
+            style={inputStyle}
+            value={username}
+            readOnly
+          />
+        </div>
+        
         {/* Rank Dropdown */}
         <div style={inlineGroupStyle}>
           <label style={labelStyle}>Rank: </label>
@@ -119,15 +133,19 @@ const Registration = () => {
           </select>
         </div>
 
-        {/* Username Field (Read-Only) */}
+        {/* Role Dropdown */}
         <div style={inlineGroupStyle}>
-          <label style={labelStyle}>Username: </label>
-          <input
-            type="text"
+          <label style={labelStyle}>Role: </label>
+          <select
             style={inputStyle}
-            value={username}
-            readOnly
-          />
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="">Select Role</option>
+            <option value="User">User</option>
+            <option value="Department Head">Department Head</option>
+            <option value="Dean">Dean</option>
+          </select>
         </div>
 
         {/* Password and Confirm Password Fields */}

@@ -20,22 +20,30 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "general_info", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
 @SecondaryTable(name="research_scholarly", 
         pkJoinColumns=@PrimaryKeyJoinColumn(name="uid"))
-public class User {
+
+public class User 
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "uid", table = "general_info", nullable = false)
     private Long userId;
 
-    public Long getID() {
-        return userId;
-    }
-
     // fields from general_info
     @Column(name = "last_name", table = "general_info")
     private String lastName;
 
+    public String getLastName() {
+        return lastName;
+    }
+
     @Column(name = "first_name", table = "general_info")
     private String firstName;
+
+    private String username;
+
+    public void setUsername() {
+        this.username = lastName + firstName;
+    }
 
     @Column(name = "pin", table = "general_info")
     private char[] pin;
@@ -45,8 +53,24 @@ public class User {
         return password;
     }
 
-    public void setPin(String pin) {
+    public void setPassword(String pin) {
         this.pin = pin.toCharArray();
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "_dept", table = "general_info", nullable = false)
+    private Department department;
+
+    public void setDepartment(String deptName) {
+        department.setDepartment(deptName);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "_user_role", table = "general_info", nullable = false)
+    private UserRole userRole;
+
+    public void setAssignedRole(String role) {
+            userRole.setAssignedRole(role);
     }
 
     @ManyToOne
@@ -60,15 +84,6 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "_status", table = "general_info")
     private UStatus status;
-
-    @ManyToOne
-	@JsonManagedReference
-    @JoinColumn(name = "_dept", table = "general_info", nullable = false)
-    private Department department;
-
-    @ManyToOne
-    @JoinColumn(name = "_user_role", table = "general_info", nullable = false)
-    private UserRole userRole;
 
     // feilds from research_scholarly
 
@@ -86,8 +101,8 @@ public class User {
 
     @Column(name = "grants", table = "research_scholarly")
     private Long grants;
-	
-	@Column(name = "awards", table = "research_scholarly")
+    
+    @Column(name = "awards", table = "research_scholarly")
     private Long awards;
 
     @Column(name = "res_exp_total", table = "research_scholarly")
@@ -112,15 +127,15 @@ public class User {
     private int ugMentored;
 
     // complex stuff
-	@JsonManagedReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teaching> teaching;
 
-	@JsonManagedReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UClasses> classes;
 
-	@JsonManagedReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UServices> serviceActivity;
 }

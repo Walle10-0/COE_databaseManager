@@ -9,32 +9,39 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id")
-    private int id;
+    //role 1 - user, role 2 - department head (currently entire database), role 3 - dean (entire database)
+    private String[] roleList; 
 
     @Column(name = "_user_role")
-    private String roleName;
+    private String assignedRole;
 
     //@OneToMany(mappedBy = "userRole")
     //private Set<User> users;
 
     public UserRole() {
         // default constructor
+        this.roleList = new String[3];
     }
 
-    public int getId() {
-        return id;
+    //index [0] - user, index [1] - department head (currently entire database), index [2] - dean (entire database)
+    public String[] getRoleList() {
+        return roleList;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getAssignedRole() {
+        return assignedRole;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setAssignedRole(String roleName) {
+        if (roleName == "user") {
+            assignedRole = roleList[0];
+        }
+        else if (roleName == "department head") {
+            assignedRole = roleList[1];
+        }
+        else if (roleName == "dean"){
+            assignedRole = roleList[2];
+        }
     }
 /*
     public Set<User> getUsers() {
