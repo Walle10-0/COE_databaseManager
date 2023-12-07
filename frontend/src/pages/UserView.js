@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import './App.css';
 import ExpandCollapseButton from './ExpandCollapseButton';
 import { useLocation } from 'react-router-dom';
+import CsvDownloadButton from 'react-json-to-csv'
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
 Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button } from '@mui/material';
@@ -71,9 +72,9 @@ function UserView() {
     });
 	}
 	
-	const handleFieldChange = (event) => {
-		const { id, value } = event.target;
-
+	const handleFieldChange = (id, event) => {
+		const value = event.target.value;
+		
 		// Update field dynamically inside jsonData
 		setUserData((prevData) => ({
 		...prevData,
@@ -81,29 +82,32 @@ function UserView() {
 		}));
 	};
 	
-	const handleINTChange = (event) => {
+	const handleMoneyChange = (event) => {
 		const { id, value } = event.target;
-		const old = userData[id];
 
 		try {	
 			// Update field dynamically inside jsonData
 			setUserData((prevData) => ({
 			...prevData,
-			[id]: parseInt(value) || 0,
+			[id]: (parseInt(value * 1000) || 0),
 			}));
 		} catch (error) {
 			console.error('Error writing data:', error);
 		}
 	};
 	
-	const handleDropdownChange = (event, id) => {
+	const handleINTChange = (id, event, operation) => {
 		const value = event.target.value;
 
-		// Update the state for dropdown values directly
-		setUserData((prevData) => ({
+		try {	
+			// Update field dynamically inside jsonData
+			setUserData((prevData) => ({
 			...prevData,
-			[id]: value,
-		}));
+			[id]: (operation(parseInt(value)) || 0),
+			}));
+		} catch (error) {
+			console.error('Error writing data:', error);
+		}
 	};
 	
 	const dropdownField = (id, label) => (
@@ -112,7 +116,7 @@ function UserView() {
 			select
 			label={label}
 			variant="outlined"
-			onChange={(event) => handleDropdownChange(event, id)}
+			onChange={(event) => handleFieldChange(id, event)}
 			value={userData?.[id] || ''}
 		>
 		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)]?.map((option) => (
@@ -129,7 +133,7 @@ function UserView() {
 			label={label}
 			variant="outlined"
 			value={userData?.[id] || ''}
-			onChange={handleFieldChange}
+			onChange={(event) => handleFieldChange(id, event)}
 		/>
 	);
 	
@@ -140,7 +144,35 @@ function UserView() {
 			type="number"
 			variant="outlined"
 			value={userData?.[id] || ''}
-			onChange={handleINTChange}
+			onChange={(event) => handleINTChange(id, event, null)}
+			InputProps={adornment && {
+				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
+			}}
+		/>
+	);
+		
+	const posIntField = (id, label, adornment = null) => (
+		<TextField
+			id={id}
+			label={label}
+			type="number"
+			variant="outlined"
+			value={userData?.[id] || ''}
+			onChange={(event) => handleINTChange(id, event, Math.abs)}
+			InputProps={adornment && {
+				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
+			}}
+		/>
+	);
+	
+	const moneyField = (id, label, adornment = null) => (
+		<TextField
+			id={id}
+			label={label}
+			type="number"
+			variant="outlined"
+			value={userData?.[id] / 1000 || ''}
+			onChange={(event) => handleMoneyChange(event)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
 			}}
@@ -151,6 +183,7 @@ function UserView() {
 		<>
 	
 		<div>
+			<CsvDownloadButton data={[userData]} delimiter=',' />
 			<center>
 			<h1>{userData?.firstName} {userData?.lastName}</h1>
 			<Box sx={mainBoxFormat}>
@@ -191,27 +224,27 @@ function UserView() {
 						autoComplete="off"
 					>
 					<div>	
-						{intField("journals", "Journals")}
-						{intField("books", "Books")}
-						{intField("chapters", "Chapters")}
+						{posIntField("journals", "Journals")}
+						{posIntField("books", "Books")}
+						{posIntField("chapters", "Chapters")}
 					</div>
 					<div>
-						{intField("conferences", "Conferences")}
-						{intField("patentInnovation", "Patents/Innovations")}
+						{posIntField("conferences", "Conferences")}
+						{posIntField("patentInnovation", "Patents/Innovations")}
 					</div>
 					<div>
-						{intField("phdAdvised", "PhD Advised")}
-						{intField("phdCompleted", "PhD Completed")}
-						{intField("msCompleted", "Masters Completed")}
+						{posIntField("phdAdvised", "PhD Advised")}
+						{posIntField("phdCompleted", "PhD Completed")}
+						{posIntField("msCompleted", "Masters Completed")}
 					</div>
 					<div>
-						{intField("ugMentored", "Undergraduate Student Research Mentored")}
-						{intField("researchExperienceStudents", "Research Experience Students")}
-						{intField("researchExperienceTotal", "Research Experience Total")}
+						{posIntField("ugMentored", "Undergraduate Student Research Mentored")}
+						{posIntField("researchExperienceStudents", "Research Experience Students")}
+						{posIntField("researchExperienceTotal", "Research Experience Total")}
 					</div>
 					<div>
-						{intField("grants", "Grants", "$K")}
-						{intField("awards", "Awards")}
+						{moneyField("grants", "Grants", "$K")}
+						{posIntField("awards", "Awards")}
 					</div>
 					</Box>
 				</Collapse>
