@@ -154,7 +154,7 @@ function UserView() {
 			<center>
 			<h1>{userData?.firstName} {userData?.lastName}</h1>
 			<Box sx={mainBoxFormat}>
-				General Information
+				Account Information
 				<ExpandCollapseButton isOpen={open1} onClick={() => setOpen1(!open1)} />
 				<Collapse in={open1} timeout="auto" unmountOnExit>
 					<Box

@@ -1,12 +1,8 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Outlet, Link } from "react-router-dom";
-import CsvDownloadButton from 'react-json-to-csv'
-import { useLocation } from 'react-router-dom';
 
-function UserList() {
-	const { state } = useLocation();
-	const [userData, setUserData] = useState(null);
-	const deptNum = state?.deptNum;
+function DeptList() {
+	const [deptData, setDeptData] = useState(null);
 	
 	useEffect(() => {	
 		fetchData();
@@ -14,12 +10,12 @@ function UserList() {
 	
 	const fetchData = async () => {
       try {
-        const response = await fetch('api/department/' + deptNum + '/users');
+        const response = await fetch('api/departments');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setUserData(data);
+        setDeptData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -28,19 +24,18 @@ function UserList() {
 	return (
 		<>
 			<div>
-				<CsvDownloadButton data={userData} delimiter=',' />
 				<center><table className = "List">
 					<tr>
-						<th><h3>Select Faculty to View</h3></th>
+						<th><h3>Select Department to View</h3></th>
 					</tr>
-					{userData ? (
-						userData.map((user, key) => {
+					{deptData ? (
+						deptData.map((dept, key) => {
 							return (
 								<tr key={key}>
 									<td>
 										<nav>
 											<ul>
-												<Link to="/UserView" state={{ userNum: user.id }}>{user.firstName} {user.lastName}</Link>
+												<Link to="/UserList" state={{ deptNum: dept.id }}>{dept.department}</Link>
 											</ul>
 										</nav>
 									</td>
@@ -53,8 +48,8 @@ function UserList() {
 				</table></center>
 			</div>
 			<h1>RAW JSON Data</h1>
-			{userData ? (
-				<pre>{JSON.stringify(userData, null, 2)}</pre>
+			{deptData ? (
+				<pre>{JSON.stringify(deptData, null, 2)}</pre>
 				) : (
 				<p>Loading...</p>
 			)}
@@ -62,4 +57,4 @@ function UserList() {
 	);
 };
 
-export default UserList;
+export default DeptList;
