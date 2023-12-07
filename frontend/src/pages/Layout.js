@@ -8,14 +8,8 @@ const Layout = () => {
           <li>
             <Link to="/">login</Link>
           </li>
-          <li>
-            <Link to="/userView">userView</Link>
-          </li>
-          <li>
-            <Link to="/editing">editing</Link>
-          </li>
 		  <li>
-			<Link to="/viewableList">viewableList</Link>
+			<Link to="/deptList">viewableList</Link>
 			</li>
 			
 			

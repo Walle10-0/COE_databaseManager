@@ -34,16 +34,41 @@ public class UserService {
 
     // update an existing user
     public UserDTO updateUser(Long id, UserDTO userDTO) {
-        User user = UserRepository.findById(id)
+        User cUser = UserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id)); // Customize exception as
                                                                                            // needed
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+		User nUser = convertFromDTO(userDTO);
+		System.out.println("id " + id);
+		System.out.println("uid " + cUser.getUserId());
+        cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
+		cUser.setLastName(nUser.getLastName() == null ? cUser.getLastName() : nUser.getLastName());
+		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
+		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
+		
+		cUser.setLoad(nUser.getLoad() == null ? cUser.getLoad() : nUser.getLoad());
+		cUser.setRank(nUser.getRank() == null ? cUser.getRank() : nUser.getRank());
+		cUser.setStatus(nUser.getStatus() == null ? cUser.getStatus() : nUser.getStatus());
+		
+		cUser.setJournals(nUser.getJournals());
+		cUser.setConferences(nUser.getConferences());
+		cUser.setBooks(nUser.getBooks());
+		cUser.setChapters(nUser.getChapters());
+		cUser.setGrants(nUser.getGrants());
+		cUser.setResearchExperienceTotal(nUser.getResearchExperienceTotal());
+		cUser.setResearchExperienceStudents(nUser.getResearchExperienceStudents());
+		cUser.setPhdAdvised(nUser.getPhdAdvised());
+		cUser.setPhdCompleted(nUser.getPhdCompleted());
+		cUser.setMsCompleted(nUser.getMsCompleted());
+		cUser.setPatentInnovation(nUser.getPatentInnovation());
+		cUser.setUgMentored(nUser.getUgMentored());
+		cUser.setAwards(nUser.getAwards());
+		
+		//cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
+		//cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
+		//cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
-        // add anything for updating roles...
-
-        user = UserRepository.save(user);
-        return convertToDTO(user);
+        cUser = UserRepository.save(cUser);
+        return convertToDTO(cUser);
     }
 
     // delete existing user
@@ -77,6 +102,7 @@ public class UserService {
 		userDTO.setMsCompleted(user.getMsCompleted());
 		userDTO.setPatentInnovation(user.getPatentInnovation());
 		userDTO.setUgMentored(user.getUgMentored());
+		userDTO.setAwards(user.getAwards());
 		
 		userDTO.setTeaching(user.getTeaching());
 		userDTO.setClasses(user.getClasses());
@@ -102,25 +128,25 @@ public class UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
 
-		    //user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
-        //user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
-		    /*
-		    userDTO.setLoad(user.getLoad().getLoad());
-		    userDTO.setRank(user.getRank().getRank());
-		    userDTO.setStatus(user.getStatus().getStatus());
+		user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+        user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
+		user.setLoad(genericRepository.findByString("CLoad", "load", dto.getLoad()));
+		user.setRank(genericRepository.findByString("URank", "rank", dto.getRank()));
+		user.setStatus(genericRepository.findByString("UStatus", "status", dto.getStatus()));
 		
-		    userDTO.setJournals(user.getJournals());
-		    userDTO.setConferences(user.getConferences());
-		    userDTO.setBooks(user.getBooks());
-		    userDTO.setChapters(user.getChapters());
-		    userDTO.setGrants(user.getGrants());
-		    userDTO.setResearchExperienceTotal(user.getResearchExperienceTotal());
-		    userDTO.setResearchExperienceStudents(user.getResearchExperienceStudents());
-		    userDTO.setPhdAdvised(user.getPhdAdvised());
-		    userDTO.setPhdCompleted(user.getPhdCompleted());
-		    userDTO.setMsCompleted(user.getMsCompleted());
-		    userDTO.setPatentInnovation(user.getPatentInnovation());
-		    userDTO.setUgMentored(user.getUgMentored());*/
+		user.setJournals(dto.getJournals());
+		user.setConferences(dto.getConferences());
+		user.setBooks(dto.getBooks());
+		user.setChapters(dto.getChapters());
+		user.setGrants(dto.getGrants());
+		user.setResearchExperienceTotal(dto.getResearchExperienceTotal());
+		user.setResearchExperienceStudents(dto.getResearchExperienceStudents());
+		user.setPhdAdvised(dto.getPhdAdvised());
+		user.setPhdCompleted(dto.getPhdCompleted());
+		user.setMsCompleted(dto.getMsCompleted());
+		user.setPatentInnovation(dto.getPatentInnovation());
+		user.setUgMentored(dto.getUgMentored());
+		user.setAwards(dto.getAwards());
 		
 		    user.setTeaching(dto.getTeaching());
 		    user.setClasses(dto.getClasses());
@@ -141,5 +167,32 @@ public class UserService {
 	
 	public List<UserDTO> findUsersByDepartmentId(int id) {
 		return convertToDTO(UserRepository.findUsersByDepartmentId(id));
+	}
+	
+	// get All Values for dropdown
+	public List<String> getAllValues(String name)
+	{
+		List<String> result;
+		switch (name) {
+			case "department":
+				result = genericRepository.findStringVals("Department", "deptName");
+				break;
+			case "load":
+				result = genericRepository.findStringVals("CLoad", "load");
+				break;
+			case "rank":
+				result = genericRepository.findStringVals("URank", "rank");
+				break;
+			case "status":
+				result = genericRepository.findStringVals("UStatus", "status");
+				break;
+			case "semester":
+				result = genericRepository.findStringVals("Semester", "fullName");
+				break;
+			default:
+				result = new ArrayList<String>();
+				break;
+		}
+		return result;
 	}
 }

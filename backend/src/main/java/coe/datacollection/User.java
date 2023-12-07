@@ -52,7 +52,6 @@ public class User {
     private UStatus status;
 
     @ManyToOne
-	@JsonManagedReference
     @JoinColumn(name = "_dept", table = "general_info", nullable = false)
     private Department department;
 

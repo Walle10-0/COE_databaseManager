@@ -6,8 +6,9 @@ import Editing from "./pages/Editing";
 import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 import UserView from "./pages/UserView";
+import DeptList from "./pages/DeptList";
 import MyComponent from "./MyComponent";
-import ViewableList from "./pages/ViewableList";
+import UserList from "./pages/UserList";
 import Layout from "./pages/Layout";
 
 function Menu() {
@@ -17,7 +18,8 @@ function Menu() {
 <Route path="/" element={<Layout />}>
 <Route index element={<Login />} />
 <Route path="UserView" element={<UserView />} />
-<Route path="ViewableList" element={<ViewableList />} />
+<Route path="UserList" element={<UserList />} />
+<Route path="DeptList" element={<DeptList />} />
 <Route path="Editing" element={<Editing />} />
 <Route path="Test" element={<MyComponent />} />
 <Route path="*" element={<NoPage />} />
