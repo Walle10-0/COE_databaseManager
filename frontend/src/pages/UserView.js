@@ -42,6 +42,8 @@ function UserView() {
 		fetchDataAndSetState();
 	}, []);
 	
+	// ------- web stuff -------
+	
 	const fetchData = async (url) => {
       try {
         const response = await fetch(url);
@@ -72,43 +74,60 @@ function UserView() {
     });
 	}
 	
-	const handleFieldChange = (id, event) => {
-		const value = event.target.value;
-		
-		// Update field dynamically inside jsonData
-		setUserData((prevData) => ({
-		...prevData,
-		[id]: value,
-		}));
-	};
+	// ----- logic for writing/fetching data -----
 	
-	const handleMoneyChange = (event) => {
-		const { id, value } = event.target;
+	const updateUserData = (value, path) => {
+		const updatedUserData = { ...userData };
+		try {
+			const pathArray = path.split('.');
+			let currentField = updatedUserData;
 
-		try {	
-			// Update field dynamically inside jsonData
-			setUserData((prevData) => ({
-			...prevData,
-			[id]: (parseInt(value * 1000) || 0),
-			}));
+			for (let i = 0; i < pathArray.length - 1; i++) {
+				currentField = currentField?.[pathArray[i]] || {};
+			}
+			
+			currentField[pathArray[pathArray.length - 1]] = value;
+			setUserData(updatedUserData);
 		} catch (error) {
 			console.error('Error writing data:', error);
 		}
 	};
 	
-	const handleINTChange = (id, event, operation) => {
-		const value = event.target.value;
+	const getUserField = (path) => {
+		try {
+			const pathArray = path.split('.');
+			let currentField = userData;
 
-		try {	
-			// Update field dynamically inside jsonData
-			setUserData((prevData) => ({
-			...prevData,
-			[id]: (operation(parseInt(value)) || 0),
-			}));
+			for (let i = 0; i < pathArray.length - 1; i++) {
+				currentField = currentField?.[pathArray[i]] || {};
+			}
+			
+			return currentField?.[pathArray[pathArray.length - 1]] || '';
+		} catch (error) {
+			console.error('Error reading data:', error);
+			return '';
+		}
+	};
+	
+	// ------ logic for various input feilds -----
+	
+	const handleMoneyChange = (path, value) => {
+		try {
+			updateUserData((parseInt(value * 1000) || 0), path);
 		} catch (error) {
 			console.error('Error writing data:', error);
 		}
 	};
+	
+	const handleINTChange = (path, value, operation) => {
+		try {
+			updateUserData((operation(parseInt(value)) || 0), path)
+		} catch (error) {
+			console.error('Error writing data:', error);
+		}
+	};
+	
+	// ----- feilds in GUI -----
 	
 	const dropdownField = (id, label) => (
 		<TextField
@@ -116,7 +135,7 @@ function UserView() {
 			select
 			label={label}
 			variant="outlined"
-			onChange={(event) => handleFieldChange(id, event)}
+			onChange={(event) => updateUserData(event.target.value, id)}
 			value={userData?.[id] || ''}
 		>
 		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)]?.map((option) => (
@@ -128,12 +147,12 @@ function UserView() {
 	);
 	
 	const freeTextField = (id, label) => (
-		<TextField
+		<TextField 
 			id={id}
 			label={label}
 			variant="outlined"
-			value={userData?.[id] || ''}
-			onChange={(event) => handleFieldChange(id, event)}
+			value={getUserField(id)}
+			onChange={(event) => updateUserData(event.target.value, id)}
 		/>
 	);
 	
@@ -143,8 +162,8 @@ function UserView() {
 			label={label}
 			type="number"
 			variant="outlined"
-			value={userData?.[id] || ''}
-			onChange={(event) => handleINTChange(id, event, null)}
+			value={getUserField(id)}
+			onChange={(event) => handleINTChange(id, event.target.value, null)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
 			}}
@@ -157,8 +176,8 @@ function UserView() {
 			label={label}
 			type="number"
 			variant="outlined"
-			value={userData?.[id] || ''}
-			onChange={(event) => handleINTChange(id, event, Math.abs)}
+			value={getUserField(id)}
+			onChange={(event) => handleINTChange(id, event.target.value, Math.abs)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
 			}}
@@ -172,13 +191,15 @@ function UserView() {
 			type="number"
 			variant="outlined"
 			value={userData?.[id] / 1000 || ''}
-			onChange={(event) => handleMoneyChange(event)}
+			onChange={(event) => handleMoneyChange(id, event.target.value)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
 			}}
 		/>
 	);
-		
+	
+	// ----- webpage output -----
+	
 	return (
 		<>
 	
@@ -268,7 +289,7 @@ function UserView() {
 						</TableHead>
 						<TableBody>
 						
-						{/*Start of table contents - Reading JSON in here? yes*/}
+						{/*Start of table contents - Reading JSON*/}
 						{userData && userData?.classes ? (userData.classes.map((row, i) => (
 							<TableRow
 							key={i}
@@ -279,7 +300,7 @@ function UserView() {
 							<TableCell align="right">{row.semester.fullName}</TableCell>
 							<TableCell align="right">{row.catalog.classType.classType}</TableCell>
 							<TableCell align="right">{row.catalog.creditHours}</TableCell>
-							<TableCell align="right">{row.students}</TableCell>
+							<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
 							</TableRow>
 					))) : null}
 					</TableBody>
