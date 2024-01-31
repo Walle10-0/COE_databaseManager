@@ -10,8 +10,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.CascadeType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "classes")
 public class UClasses {
@@ -26,7 +30,7 @@ public class UClasses {
 	@JsonBackReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "_semester")
     private Semester semester;
 
@@ -36,48 +40,4 @@ public class UClasses {
 
     @Column(name = "students")
     private int students;
-
-    // Constructors
-    public UClasses() {
-    }
-
-    public UClasses(User user, Semester semester, Catalog catalog, int students) {
-        this.user = user;
-        this.semester = semester;
-        this.catalog = catalog;
-        this.students = students;
-    }
-
-    // Getters and setters
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
-    }
-
-    public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
-    }
-
-    public int getStudents() {
-        return students;
-    }
-
-    public void setStudents(int students) {
-        this.students = students;
-    }
 }
