@@ -22,14 +22,13 @@ public class Semester {
     @Column(name = "_year")
     private int year;
 
-    @ManyToOne
-    @JoinColumn(name = "_semester_name")
-    private SemesterName semesterName;
+    @Column(name = "semester_name")
+    private String semesterName;
 		
 	//@Transient
 	public String getFullName()
 	{
-		return semesterName == null ? "" : semesterName.getSemesterName() + " " + year;
+		return semesterName + " " + year;
 	}
 
     // Getters and setters
@@ -49,11 +48,11 @@ public class Semester {
         this.year = year;
     }
 
-    public SemesterName getSemesterName() {
+    public String getSemesterName() {
         return semesterName;
     }
 
-    public void setSemesterName(SemesterName semesterName) {
+    public void setSemesterName(String semesterName) {
         this.semesterName = semesterName;
     }
 }
