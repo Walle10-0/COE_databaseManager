@@ -18,6 +18,11 @@ public class GenericRepository {
         return query.getResultList();
     }
 	
+	public List<String> test() {
+        Query query = entityManager.createQuery("SELECT e.semesterName.semesterName FROM Semester e");
+        return query.getResultList();
+    }
+	
 	public <T> T findByString(String entity, String feild, String value) {
         Query query = entityManager.createQuery("SELECT e FROM " + entity + " e WHERE e." + feild + " = :value");
 		query.setParameter("value", value);

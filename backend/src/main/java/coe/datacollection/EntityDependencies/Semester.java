@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
@@ -21,9 +22,14 @@ public class Semester {
     @Column(name = "_year")
     private int year;
 
-    @ManyToOne
-    @JoinColumn(name = "_semester_name")
-    private SemesterName semesterName;
+    @Column(name = "semester_name")
+    private String semesterName;
+		
+	//@Transient
+	public String getFullName()
+	{
+		return semesterName + " " + year;
+	}
 
     // Getters and setters
     public int getId() {
@@ -42,16 +48,11 @@ public class Semester {
         this.year = year;
     }
 
-    public SemesterName getSemesterName() {
+    public String getSemesterName() {
         return semesterName;
     }
 
-    public void setSemesterName(SemesterName semesterName) {
+    public void setSemesterName(String semesterName) {
         this.semesterName = semesterName;
     }
-	
-	public String getFullName()
-	{
-		return semesterName.getSemesterName() + " " + year;
-	}
 }
