@@ -271,6 +271,7 @@ function UserView() {
 					</Box>
 				</Collapse>
 			</Box>
+			
 			<Box sx={mainBoxFormat}>
 				Teaching Records
 				<ExpandCollapseButton isOpen={open3} onClick={() => setOpen3(!open3)} />
@@ -307,7 +308,7 @@ function UserView() {
 					</TableBody>
 					</Table>
 					</TableContainer>
-{/*Start of example*/}
+			{/*Start of example*/}
 				<h5>Other Stuff</h5>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -337,10 +338,10 @@ function UserView() {
 					</TableBody>
 					</Table>
 					</TableContainer>
-{/*End of example*/}
-					
+			{/*End of example*/}
 				</Collapse>
 			</Box>
+			
 			<Box sx={mainBoxFormat}>
 				Service Activity
 				<ExpandCollapseButton isOpen={open4} onClick={() => setOpen4(!open4)} />
@@ -373,21 +374,19 @@ function UserView() {
 			</center>
 			</div>
 			
-			<div>
-      <h1>RAW JSON Data</h1>
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
-		</div>
+			<h1>RAW JSON Data</h1>
+			<pre>{JSON.stringify(userData, null, 2)}</pre>
 		</>
 		
 	// error handling
-      ) : userNum ? (
+    ) : userNum ? (
 		<Box sx={{width: "100%"}}>
 			<LinearProgress />
 			<h1>Loading...</h1>
 		</Box>
-      ) : (
+    ) : (
 		<p>Error - no user specified</p>
-	  );
-	}
+	);
+}
 
 export default UserView;

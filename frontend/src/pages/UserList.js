@@ -49,9 +49,12 @@ function UserList() {
 					})}
 				</table></center>
 			</div>
+			
 			<h1>RAW JSON Data</h1>
 			<pre>{JSON.stringify(userData, null, 2)}</pre>
 		</>
+		
+	// error handling
 	) : deptNum ? (
 		<Box sx={{width: "100%"}}>
 			<LinearProgress />
