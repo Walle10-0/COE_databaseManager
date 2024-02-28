@@ -5,8 +5,9 @@ import { useLocation } from 'react-router-dom';
 import CsvDownloadButton from 'react-json-to-csv'
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
-Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button } from '@mui/material';
+Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import AddIcon from '@mui/icons-material/Add';
 
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
@@ -25,6 +26,7 @@ function UserView() {
 		'load',
 		'rank',
 		'status',
+		'level',
 		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
@@ -136,9 +138,9 @@ function UserView() {
 			label={label}
 			variant="outlined"
 			onChange={(event) => updateUserData(event.target.value, id)}
-			value={userData?.[id] || ''}
+			value={getUserField(id)}
 		>
-		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)]?.map((option) => (
+		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id.split('.').slice(-1)[0])]?.map((option) => (
 			<MenuItem key={option} value={option}>
 				{option}
 			</MenuItem>
@@ -302,7 +304,7 @@ function UserView() {
 							<TableCell align="right">{row.catalog.creditHours}</TableCell>
 							<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
 							</TableRow>
-					))) : null}
+					))) : null}	
 					</TableBody>
 					</Table>
 					</TableContainer>
@@ -344,33 +346,26 @@ function UserView() {
 				Service Activity
 				<ExpandCollapseButton isOpen={open4} onClick={() => setOpen4(!open4)} />
 				<Collapse in={open4} timeout="auto" unmountOnExit>
-
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650, fontSize: 30}} size="small" aria-label="a dense table">
-						<TableHead>
-							<TableRow>
-								<TableCell>Semester:</TableCell>
-								<TableCell align="right">Description</TableCell>
-								<TableCell align="right">Level</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-						
-						{/*Start of table contents - Reading JSON in here? yes*/}
-						{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
-							<TableRow
-							key={i}
-							>
-								<TableCell component="th" scope="row">
-									{row.semester.fullName}
-								</TableCell>
-							<TableCell align="right">{row.description}</TableCell>
-							<TableCell align="right">{row.level.level}</TableCell>
-							</TableRow>
+					<Box
+						component="form"
+						sx={{ p:2, '& .MuiTextField-root': { m: 1, fontSize: 18}}}
+						noValidate
+						autoComplete="off"
+					>
+					{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
+							<div>
+								{freeTextField("serviceActivity." + i + ".semester.fullName", "Semester")}
+								{freeTextField("serviceActivity." + i + ".description", "Description")}
+								{dropdownField("serviceActivity." + i + ".level.level", "Level")}
+							</div>
 					))) : null}
-					</TableBody>
-					</Table>
-					</TableContainer>
+					<IconButton aria-label="add item" color="primary" disabled={!(userData && userData?.serviceActivity)} onClick={(event) => {
+						const theList = userData?.serviceActivity
+						updateUserData([ ...theList, theList[theList.length - 1]], "serviceActivity");
+					}}>
+						<AddIcon />
+					</IconButton>
+					</Box>
 				</Collapse>
 			</Box>
 			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)}>
