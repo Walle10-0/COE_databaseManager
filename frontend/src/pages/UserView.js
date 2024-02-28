@@ -85,6 +85,10 @@ function UserView() {
 			let currentField = updatedUserData;
 
 			for (let i = 0; i < pathArray.length - 1; i++) {
+				if(currentField[pathArray[i]] == undefined)
+				{
+					currentField[pathArray[i]] = {}; // add feild if it does not exist
+				}
 				currentField = currentField?.[pathArray[i]] || {};
 			}
 			
@@ -192,12 +196,22 @@ function UserView() {
 			label={label}
 			type="number"
 			variant="outlined"
-			value={userData?.[id] / 1000 || ''}
+			value={getUserField(id) / 1000 || ''}
 			onChange={(event) => handleMoneyChange(id, event.target.value)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
 			}}
 		/>
+	);
+	
+	// ---- list operations ----
+	const addToListButton = (listFeild) => (
+		<IconButton aria-label="add item" color="primary" disabled={!(userData && userData?.[listFeild])} onClick={(event) => {
+			const theList = userData?.[listFeild]
+			updateUserData([ ...theList, {}], listFeild);
+		}}>
+			<AddIcon />
+		</IconButton>
 	);
 	
 	// ----- webpage output -----
@@ -297,17 +311,18 @@ function UserView() {
 							key={i}
 							>
 								<TableCell component="th" scope="row">
-									{row.catalog.className}
+									{row?.catalog?.className}
 								</TableCell>
-							<TableCell align="right">{row.semester.fullName}</TableCell>
-							<TableCell align="right">{row.catalog.classType.classType}</TableCell>
-							<TableCell align="right">{row.catalog.creditHours}</TableCell>
+							<TableCell align="right">{freeTextField("classes." + i + ".semester.fullName", "Semester")}</TableCell>
+							<TableCell align="right">{row?.catalog?.classType?.classType}</TableCell>
+							<TableCell align="right">{row?.catalog?.creditHours}</TableCell>
 							<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
 							</TableRow>
 					))) : null}	
 					</TableBody>
 					</Table>
 					</TableContainer>
+					{addToListButton("classes")}
 			{/*Start of example*/}
 				<h5>Other Stuff</h5>
 				<TableContainer component={Paper}>
@@ -359,12 +374,7 @@ function UserView() {
 								{dropdownField("serviceActivity." + i + ".level.level", "Level")}
 							</div>
 					))) : null}
-					<IconButton aria-label="add item" color="primary" disabled={!(userData && userData?.serviceActivity)} onClick={(event) => {
-						const theList = userData?.serviceActivity
-						updateUserData([ ...theList, theList[theList.length - 1]], "serviceActivity");
-					}}>
-						<AddIcon />
-					</IconButton>
+					{addToListButton("serviceActivity")}
 					</Box>
 				</Collapse>
 			</Box>
