@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import CsvDownloadButton from 'react-json-to-csv'
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
-Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton } from '@mui/material';
+Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton, LinearProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -202,9 +202,8 @@ function UserView() {
 	
 	// ----- webpage output -----
 	
-	return (
+	return userData ? (
 		<>
-	
 		<div>
 			<CsvDownloadButton data={[userData]} delimiter=',' />
 			<center>
@@ -368,7 +367,7 @@ function UserView() {
 					</Box>
 				</Collapse>
 			</Box>
-			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)}>
+			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)} disabled={!userData}>
 				Submit
 			</Button>
 			</center>
@@ -376,14 +375,19 @@ function UserView() {
 			
 			<div>
       <h1>RAW JSON Data</h1>
-      {userData ? (
         <pre>{JSON.stringify(userData, null, 2)}</pre>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+		</div>
 		</>
-		);
+		
+	// error handling
+      ) : userNum ? (
+		<Box sx={{width: "100%"}}>
+			<LinearProgress />
+			<h1>Loading...</h1>
+		</Box>
+      ) : (
+		<p>Error - no user specified</p>
+	  );
 	}
 
 export default UserView;

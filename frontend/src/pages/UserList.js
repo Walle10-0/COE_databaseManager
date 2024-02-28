@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { Outlet, Link } from "react-router-dom";
 import CsvDownloadButton from 'react-json-to-csv'
 import { useLocation } from 'react-router-dom';
+import { Box, LinearProgress } from '@mui/material';
 
 function UserList() {
 	const { state } = useLocation();
@@ -25,7 +26,7 @@ function UserList() {
       }
     };
 	
-	return (
+	return userData ? (
 		<>
 			<div>
 				<CsvDownloadButton data={userData} delimiter=',' />
@@ -33,32 +34,31 @@ function UserList() {
 					<tr>
 						<th><h3>Select Faculty to View</h3></th>
 					</tr>
-					{userData ? (
-						userData.map((user, key) => {
-							return (
-								<tr key={key}>
-									<td>
-										<nav>
-											<ul>
-												<Link to="/UserView" state={{ userNum: user.id }}>{user.firstName} {user.lastName}</Link>
-											</ul>
-										</nav>
-									</td>
-								</tr>
-							)
-						})
-					) : (
-						<tr>Loading...</tr>
-					)}
+					{userData.map((user, key) => {
+						return (
+							<tr key={key}>
+								<td>
+									<nav>
+										<ul>
+											<Link to="/UserView" state={{ userNum: user.id }}>{user.firstName} {user.lastName}</Link>
+										</ul>
+									</nav>
+								</td>
+							</tr>
+						)
+					})}
 				</table></center>
 			</div>
 			<h1>RAW JSON Data</h1>
-			{userData ? (
-				<pre>{JSON.stringify(userData, null, 2)}</pre>
-				) : (
-				<p>Loading...</p>
-			)}
+			<pre>{JSON.stringify(userData, null, 2)}</pre>
 		</>
+	) : deptNum ? (
+		<Box sx={{width: "100%"}}>
+			<LinearProgress />
+			<h1>Loading...</h1>
+		</Box>
+	) : (
+		<p>Error - no department specified</p>
 	);
 };
 
