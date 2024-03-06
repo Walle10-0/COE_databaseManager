@@ -224,9 +224,6 @@ function UserView() {
 		<IconButton aria-label="add item" color="primary" onClick={(event) => {
 			let theList = getUserField(listFeild)
 			theList.splice(index, 1);
-			//const half1OfList = theList.slice(0, index-1);
-			//const half2OfList = theList(index);
-			//const newList = half1OfList.concat(half2OfList);
 			updateUserData(theList, listFeild);
 		}}>
 			<DeleteIcon />
@@ -320,12 +317,13 @@ function UserView() {
 							key={i}
 							>
 								<TableCell component="th" scope="row">
-									{row?.catalog?.className}
+									{freeTextField("classes." + i + ".catalog.className", "Class Name")}
 								</TableCell>
-							<TableCell align="right">{freeTextField("classes." + i + ".semester.fullName", "Semester")}</TableCell>
-							<TableCell align="right">{row?.catalog?.classType?.classType}</TableCell>
-							<TableCell align="right">{row?.catalog?.creditHours}</TableCell>
-							<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
+								<TableCell align="right">{freeTextField("classes." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="right">{row?.catalog?.classType?.classType}</TableCell>
+								<TableCell align="right">{row?.catalog?.creditHours}</TableCell>
+								<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
+								<TableCell align="center">{deleteFromListButton("classes", i)}</TableCell>
 							</TableRow>
 					))) : null}	
 					</TableBody>
@@ -342,6 +340,7 @@ function UserView() {
 								<TableCell align="right">{posIntField("teaching." + i + ".newPreps", "New Preps")}</TableCell>
 								<TableCell align="right">{posIntField("teaching." + i + ".newDevs", "New Devs")}</TableCell>
 								<TableCell align="right">{posIntField("teaching." + i + ".overloads", "Overloads")}</TableCell>
+								<TableCell align="center">{deleteFromListButton("teaching", i)}</TableCell>
 							</TableRow>
 						))) : null}
 					</TableBody>
