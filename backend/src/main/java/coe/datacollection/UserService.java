@@ -2,56 +2,92 @@ package coe.datacollection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import coe.datacollection.EntityDependencies.URank;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.Data;
 
-
+@Data
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
     private GenericRepository genericRepository;
-    private BCryptPasswordEncoder passwordEncoder; // For hashing and verifying passwords
-    
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    @Autowired
+    private final BCryptPasswordEncoder passwordEncoder; // For hashing and verifying passwords
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
-    public boolean validateName(RegistrationDTO regDTO) {
+    public String authenticateAndGetJwt(String username, String password) {
+        User user = getUserByUsername(username);
+        if (user != null && passwordEncoder.matches(password, user.getPin())) {
+            return jwtUtil.generateToken(user); 
+        } else {
+            return null;
+        }
+    }
+    
+    public boolean accountExist(String fName, String lName) {
         List <User> users = userRepository.findAll();
-            for (User testUser : users) {
-                if (testUser.getLastName().equals(regDTO.getLastName())) {
-                    if (testUser.getFirstName().equals(regDTO.getFirstName())) {
-                        return true;
-                    }                   
-                }
-            }
-            return false;
-    }
-
-    public boolean newUser(RegistrationDTO registrationDTO)
-    {
-        if (registrationDTO!= null) {
-            if (!validateName(registrationDTO)) {
-                User user = new User();           
-                user.setFirstName(registrationDTO.getFirstName());
-                user.setLastName(registrationDTO.getLastName());
-                user.setUsername(registrationDTO.getUsername());
-                String hashedPassword = hashPassword(registrationDTO.getPassword());
-                user.setPassword(hashedPassword);
-                user.setRank(registrationDTO.getRank());
-                user.setDepartment(registrationDTO.getDepartment());
-                user.setAssignedRole(registrationDTO.getRole());
-                user = userRepository.save(user);
+        for (User testUser : users) {
+            if (testUser.getLastName().equals(lName) & testUser.getFirstName().equals(fName)) {
                 return true;
             }
         }
         return false;
+    } 
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    public Boolean newUser(RegistrationDTO registrationDTO) throws CustomExceptions
+    {
+        if (accountExist(registrationDTO.getFirstName(), registrationDTO.getLastName())) {
+            throw new CustomExceptions(
+              "There is an account with that username:" + registrationDTO.getUsername());
+        }
+        User user = new User();        
+        user.setUsername(registrationDTO.getUsername());
+        user.setPin(passwordEncoder.encode(registrationDTO.getPin()));
+        user.setFirstName(registrationDTO.getFirstName());
+        user.setLastName(registrationDTO.getLastName());
+        user.setRank(new URank(registrationDTO.getRank()));
+        List <Department> departments = departmentRepository.findByNameContaining(registrationDTO.getDepartment());
+        if (departments == null) {
+            return false;
+        }
+        else {
+            for (Department dept : departments) {
+                if (dept.getDepartmentName().equals(registrationDTO.getDepartment())) {
+                    user.setDepartment(dept);
+                }
+            }
+        }
+        user.setAssignedRole(new UserRole(registrationDTO.getRole()));
+        user = userRepository.save(user);
+        log.info("Creating new user with details: {}", user);                 
+        if(user != null) {
+            return true;
+        }
+        return false;
+    }
+
+    //Spring Data JPA automatically implements this method for you, allowing you to fetch a User entity based on the username. The method findByUsername leverages Spring Data JPA's method naming conventions to generate the appropriate query.
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public boolean verifyPassword(String departmentName, Long userID, String password) 
@@ -69,17 +105,12 @@ public class UserService {
                 List<User> userInDept = userRepository.findUsersByDepartment(tempDept);
                 for (User user : userInDept) {
                     if (user.getUserId().equals(userID)) {
-                        return passwordEncoder.matches(password, user.getPassword());
+                        return passwordEncoder.matches(password, user.getPin());
                     }
                 }
             }
             return false;
         }
-    }
-
-    private String hashPassword(String password) 
-    {
-        return passwordEncoder.encode(password);
     }
 
     // retrieve all users
@@ -310,7 +341,7 @@ public class UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
 
-		user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
+		//user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
         user.setAssignedRole(dto.getUserRole());
 		//user.setLoad(genericRepository.findByString("CLoad", "load", dto.getLoad()));
 		//user.setRank(genericRepository.findByString("URank", "rank", dto.getRank()));
@@ -378,3 +409,4 @@ public class UserService {
 		return result;
 	}
 }
+

@@ -1,45 +1,40 @@
 package coe.datacollection;
 
-import coe.datacollection.EntityDependencies.URank;
+import lombok.Data;
 
+@Data
 public class RegistrationDTO {
     private String username;
+    private String pin;
+    private String firstName;
+    private String lastName;
+    private String rank;
+    private String department;
+    private String role;
 
     public String getUsername() {
         return username;
     }
 
-    private String password;
-
-    public String getPassword() {
-        return password;
+    public String getPin() {
+        return pin;
     }
-
-    private String firstName;
 
     public String getFirstName() {
         return firstName;
     }
 
-    private String lastName;
-
     public String getLastName() {
         return lastName;
-    }   
+    }  
 
-    private URank rank;
-
-    public URank getRank() {
+    public String getRank() {
         return rank;
     }
 
-    private String department;
-
     public String getDepartment() {
         return department;
-    }
-
-    private String role;
+    } 
 
     public String getRole() {
         return role;

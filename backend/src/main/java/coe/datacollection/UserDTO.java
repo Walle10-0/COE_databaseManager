@@ -21,12 +21,12 @@ public class UserDTO {
 	private String department;
 	private String userRole;
 
-	// feilds from general_info
+	// fields from general_info
     private CLoad load;
     private URank rank;
     private UStatus status;
 	
-	// feilds from research_scholarly
+	// fields from research_scholarly
     private int journals;
     private int conferences;
     private int books;
@@ -45,6 +45,4 @@ public class UserDTO {
 	private List<Teaching> teaching;
     private List<UClasses> classes;
     private List<UServices> serviceActivity;
-
-
 }

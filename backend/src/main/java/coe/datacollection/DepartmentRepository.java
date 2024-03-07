@@ -15,8 +15,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 	public Department findById(int id);
 	public Department findByDeptName(String deptName);
 	
-	@Query("SELECT d.department FROM Department")
-	public List<String> getNames();
+	// @Query("SELECT d.department FROM Department")
+	// public List<String> getNames();
 
 	@Query("SELECT d.deptName FROM Department d WHERE d.deptId = :id")
 	public String findNameFromId(@Param("id") Integer id);

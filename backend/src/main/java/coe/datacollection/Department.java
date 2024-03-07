@@ -13,6 +13,8 @@ public class Department {
     @Column(name = "_dept", nullable = false)
     private String deptName;
 
+    
+
     // Standard getters and setters
     public int getId() {
         return deptId;
