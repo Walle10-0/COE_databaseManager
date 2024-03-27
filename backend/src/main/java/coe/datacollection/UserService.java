@@ -65,7 +65,7 @@ public class UserService {
 		cUser.setAwards(nUser.getAwards());
 		
 		cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
-		//cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
+		cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
 		cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
         cUser = UserRepository.save(cUser);
