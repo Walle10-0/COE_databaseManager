@@ -87,9 +87,9 @@ public class UserService {
 		userDTO.setDepartment(user.getDepartment().getDepartment());
         userDTO.setRoleName(user.getUserRole().getRoleName());
 		
-		userDTO.setLoad(user.getLoad().getLoad());
-		userDTO.setRank(user.getRank().getRank());
-		userDTO.setStatus(user.getStatus().getStatus());
+		userDTO.setLoad(user.getLoad() == null ? null : user.getLoad().getLoad());
+		userDTO.setRank(user.getRank() == null ? null : user.getRank().getRank());
+		userDTO.setStatus(user.getStatus() == null ? null : user.getStatus().getStatus());
 		
 		userDTO.setJournals(user.getJournals());
 		userDTO.setConferences(user.getConferences());
