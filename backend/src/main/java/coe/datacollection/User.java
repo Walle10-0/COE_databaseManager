@@ -36,8 +36,8 @@ public class User {
     @Column(name = "pin")
     private char[] pin;
 
-    @Column(name = "salt")
-    private char[] salt;
+    //@Column(name = "salt")
+    //private char[] salt;
 
     @ManyToOne
     @JoinColumn(name = "_load")
