@@ -1,0 +1,258 @@
+this is the structure of the mysql databas for reference
+
++--------------------+
+| Tables_in_coedata  |
++--------------------+
+| _catalog           |
+| _class_pre         |
+| _class_type        |
+| _dept              |
+| _level             |
+| _load              |
+| _rank              |
+| _semester          |
+| _semester_name     |
+| _status            |
+| _user_role         |
+| classes            |
+| general_info       |
+| research_scholarly |
+| service_activity   |
+| teaching           |
++--------------------+
+
+describe _catalog;
++--------------+-------------------+------+-----+---------+----------------+
+| Field        | Type              | Null | Key | Default | Extra          |
++--------------+-------------------+------+-----+---------+----------------+
+| id           | smallint unsigned | NO   | PRI | NULL    | auto_increment |
+| _class_pre   | smallint unsigned | NO   | MUL | NULL    |                |
+| class_num    | smallint unsigned | NO   |     | NULL    |                |
+| credit_hours | tinyint unsigned  | NO   |     | NULL    |                |
+| _class_type  | tinyint unsigned  | NO   | MUL | NULL    |                |
++--------------+-------------------+------+-----+---------+----------------+
+
+describe _class_pre;
++------------+-------------------+------+-----+---------+----------------+
+| Field      | Type              | Null | Key | Default | Extra          |
++------------+-------------------+------+-----+---------+----------------+
+| id         | smallint unsigned | NO   | PRI | NULL    | auto_increment |
+| _class_pre | tinytext          | NO   |     | NULL    |                |
++------------+-------------------+------+-----+---------+----------------+
+
+describe _class_type;select * from _class_type;
++-------------+------------------+------+-----+---------+----------------+
+| Field       | Type             | Null | Key | Default | Extra          |
++-------------+------------------+------+-----+---------+----------------+
+| id          | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _class_type | tinytext         | NO   |     | NULL    |                |
++-------------+------------------+------+-----+---------+----------------+
++----+-------------------------+
+| id | _class_type             |
++----+-------------------------+
+|  1 | Graduate Course         |
+|  2 | Undergraduate Course    |
+|  3 | Fully GTA Supported Lab |
++----+-------------------------+
+
+describe _dept; select * from _dept
++-------+------------------+------+-----+---------+----------------+
+| Field | Type             | Null | Key | Default | Extra          |
++-------+------------------+------+-----+---------+----------------+
+| id    | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _dept | tinytext         | NO   |     | NULL    |                |
++-------+------------------+------+-----+---------+----------------+
++----+-------+
+| id | _dept |
++----+-------+
+|  1 | AE    |
+|  2 | CivE  |
+|  3 | EECS  |
+|  4 | EF    |
+|  5 | ME    |
++----+-------+
+
+describe _level; select * from _level
++--------+------------------+------+-----+---------+----------------+
+| Field  | Type             | Null | Key | Default | Extra          |
++--------+------------------+------+-----+---------+----------------+
+| id     | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _level | tinytext         | NO   |     | NULL    |                |
++--------+------------------+------+-----+---------+----------------+
++----+--------------+
+| id | _level       |
++----+--------------+
+|  1 | Department   |
+|  2 | College      |
+|  3 | University   |
+|  4 | Professional |
++----+--------------+
+
+describe _load; select * from _load;
++-------+------------------+------+-----+---------+----------------+
+| Field | Type             | Null | Key | Default | Extra          |
++-------+------------------+------+-----+---------+----------------+
+| id    | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _load | tinytext         | NO   |     | NULL    |                |
++-------+------------------+------+-----+---------+----------------+
++----+--------------------------+
+| id | _load                    |
++----+--------------------------+
+|  1 | On Full Load             |
+|  2 | On 1 Year Sabbatical     |
+|  3 | On 1 Semester Sabbatical |
+|  4 | On Phased Retirement     |
+|  5 | On 50% Leave             |
+|  6 | On 100% Leave            |
++----+--------------------------+
+
+describe _rank; select * from _rank;
++-------+------------------+------+-----+---------+----------------+
+| Field | Type             | Null | Key | Default | Extra          |
++-------+------------------+------+-----+---------+----------------+
+| id    | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _rank | tinytext         | NO   |     | NULL    |                |
++-------+------------------+------+-----+---------+----------------+
++----+-------------------------+
+| id | _rank                   |
++----+-------------------------+
+|  1 | Instructor              |
+|  2 | Assistant Professor     |
+|  3 | Associate Professor     |
+|  4 | Professor               |
+|  5 | Distinguished Professor |
++----+-------------------------+
+
+describe _semester; select * from _semester;
++----------------+-------------------+------+-----+---------+----------------+
+| Field          | Type              | Null | Key | Default | Extra          |
++----------------+-------------------+------+-----+---------+----------------+
+| id             | smallint unsigned | NO   | PRI | NULL    | auto_increment |
+| _semester_name | tinyint unsigned  | NO   | MUL | NULL    |                |
+| _year          | year              | NO   |     | NULL    |                |
++----------------+-------------------+------+-----+---------+----------------+
++----+----------------+-------+
+| id | _semester_name | _year |
++----+----------------+-------+
+|  1 |              1 |  2023 |
+|  2 |              2 |  2024 |
+|  3 |              1 |  2024 |
+|  4 |              2 |  2023 |
+|  5 |              2 |  2025 |
++----+----------------+-------+
+
+describe _semester_name; select * from _semester_name;
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| id             | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _semester_name | tinytext         | NO   |     | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
++----+----------------+
+| id | _semester_name |
++----+----------------+
+|  1 | FALL           |
+|  2 | SPRING         |
+|  3 | SUMMER A       |
+|  4 | SUMMER B       |
++----+----------------+
+
+describe _status; select * from _status;
++---------+------------------+------+-----+---------+----------------+
+| Field   | Type             | Null | Key | Default | Extra          |
++---------+------------------+------+-----+---------+----------------+
+| id      | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _status | tinytext         | NO   |     | NULL    |                |
++---------+------------------+------+-----+---------+----------------+
++----+----------+
+| id | _status  |
++----+----------+
+|  1 | T        |
+|  2 | TT       |
+|  3 | NTT      |
+|  4 | Visiting |
++----+----------+
+
+describe _user_role; select * from _user_role;
++------------+------------------+------+-----+---------+----------------+
+| Field      | Type             | Null | Key | Default | Extra          |
++------------+------------------+------+-----+---------+----------------+
+| id         | tinyint unsigned | NO   | PRI | NULL    | auto_increment |
+| _user_role | tinytext         | NO   |     | NULL    |                |
++------------+------------------+------+-----+---------+----------------+
++----+-----------------+
+| id | _user_role      |
++----+-----------------+
+|  1 | faculty         |
+|  2 | department head |
+|  3 | dean            |
++----+-----------------+
+
+describe classes;
++-----------+-------------------+------+-----+---------+----------------+
+| Field     | Type              | Null | Key | Default | Extra          |
++-----------+-------------------+------+-----+---------+----------------+
+| uid       | int unsigned      | NO   | MUL | NULL    |                |
+| _semester | smallint unsigned | NO   | MUL | NULL    |                |
+| _catalog  | smallint unsigned | NO   | MUL | NULL    |                |
+| students  | smallint unsigned | YES  |     | 0       |                |
+| id        | int unsigned      | NO   | PRI | NULL    | auto_increment |
++-----------+-------------------+------+-----+---------+----------------+
+
+describe general_info;
++------------+------------------+------+-----+---------+----------------+
+| Field      | Type             | Null | Key | Default | Extra          |
++------------+------------------+------+-----+---------+----------------+
+| uid        | int unsigned     | NO   | PRI | NULL    | auto_increment |
+| last_name  | tinytext         | YES  |     | NULL    |                |
+| first_name | tinytext         | YES  |     | NULL    |                |
+| pin        | varchar(64)      | YES  |     | NULL    |                |
+| salt       | char(64)         | NO   | UNI | NULL    |                |
+| _load      | tinyint unsigned | YES  | MUL | NULL    |                |
+| _rank      | tinyint unsigned | YES  | MUL | NULL    |                |
+| _status    | tinyint unsigned | YES  | MUL | NULL    |                |
+| _dept      | tinyint unsigned | YES  | MUL | NULL    |                |
+| _user_role | tinyint unsigned | NO   | MUL | NULL    |                |
++------------+------------------+------+-----+---------+----------------+
+
+describe research_scholarly ;
++-------------------+--------------------+------+-----+---------+-------+
+| Field             | Type               | Null | Key | Default | Extra |
++-------------------+--------------------+------+-----+---------+-------+
+| uid               | int unsigned       | NO   | PRI | NULL    |       |
+| jour_pubs         | mediumint unsigned | YES  |     | 0       |       |
+| conf_pubs         | mediumint unsigned | YES  |     | 0       |       |
+| books             | mediumint unsigned | YES  |     | 0       |       |
+| chapters          | mediumint unsigned | YES  |     | 0       |       |
+| grants            | bigint             | YES  |     | NULL    |       |
+| res_exp_total     | bigint             | YES  |     | NULL    |       |
+| res_exp_students  | bigint             | YES  |     | NULL    |       |
+| phd_advised       | mediumint unsigned | YES  |     | 0       |       |
+| phd_completed     | mediumint unsigned | YES  |     | 0       |       |
+| ms_completed      | mediumint unsigned | YES  |     | 0       |       |
+| patent_innovation | mediumint unsigned | YES  |     | 0       |       |
+| ug_mentored       | mediumint unsigned | YES  |     | 0       |       |
+| awards            | bigint             | YES  |     | 0       |       |
++-------------------+--------------------+------+-----+---------+-------+
+
+describe service_activity;
++-------------+-------------------+------+-----+---------+----------------+
+| Field       | Type              | Null | Key | Default | Extra          |
++-------------+-------------------+------+-----+---------+----------------+
+| uid         | int unsigned      | NO   | MUL | NULL    |                |
+| _semester   | smallint unsigned | NO   | MUL | NULL    |                |
+| description | mediumtext        | NO   |     | NULL    |                |
+| _level      | tinyint unsigned  | NO   | MUL | NULL    |                |
+| id          | int unsigned      | NO   | PRI | NULL    | auto_increment |
++-------------+-------------------+------+-----+---------+----------------+
+
+describe teaching;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| uid       | int unsigned      | NO   | PRI | NULL    |       |
+| _semester | smallint unsigned | NO   | PRI | NULL    |       |
+| new_preps | smallint unsigned | YES  |     | 0       |       |
+| new_devs  | smallint unsigned | YES  |     | 0       |       |
+| overloads | smallint unsigned | YES  |     | 0       |       |
++-----------+-------------------+------+-----+---------+-------+
