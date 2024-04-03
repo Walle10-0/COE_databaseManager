@@ -203,7 +203,6 @@ describe users;
 | last_name         | tinytext           | YES  |     | NULL    |                |
 | first_name        | tinytext           | YES  |     | NULL    |                |
 | pin               | varchar(64)        | YES  |     | NULL    |                |
-| salt              | varchar(64)        | YES  |     | NULL    |                |
 | _load             | tinyint unsigned   | YES  | MUL | NULL    |                |
 | _rank             | tinyint unsigned   | YES  | MUL | NULL    |                |
 | _status           | tinyint unsigned   | YES  | MUL | NULL    |                |
