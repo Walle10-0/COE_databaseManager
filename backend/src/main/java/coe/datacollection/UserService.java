@@ -1,4 +1,5 @@
 package coe.datacollection;
+import coe.datacollection.EntityDependencies.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,9 +64,9 @@ public class UserService {
 		cUser.setUgMentored(nUser.getUgMentored());
 		cUser.setAwards(nUser.getAwards());
 		
-		//cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
-		//cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
-		//cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
+		cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
+		cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
+		cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
         cUser = UserRepository.save(cUser);
         return convertToDTO(cUser);
@@ -86,9 +87,9 @@ public class UserService {
 		userDTO.setDepartment(user.getDepartment().getDepartment());
         userDTO.setRoleName(user.getUserRole().getRoleName());
 		
-		userDTO.setLoad(user.getLoad().getLoad());
-		userDTO.setRank(user.getRank().getRank());
-		userDTO.setStatus(user.getStatus().getStatus());
+		userDTO.setLoad(user.getLoad() == null ? null : user.getLoad().getLoad());
+		userDTO.setRank(user.getRank() == null ? null : user.getRank().getRank());
+		userDTO.setStatus(user.getStatus() == null ? null : user.getStatus().getStatus());
 		
 		userDTO.setJournals(user.getJournals());
 		userDTO.setConferences(user.getConferences());
@@ -148,9 +149,68 @@ public class UserService {
 		user.setUgMentored(dto.getUgMentored());
 		user.setAwards(dto.getAwards());
 		
-		    user.setTeaching(dto.getTeaching());
-		    user.setClasses(dto.getClasses());
-		    user.setServiceActivity(dto.getServiceActivity());
+		List<Semester> mySemesters = new ArrayList<Semester>();
+		boolean foundSem;
+		
+		for(Teaching i : dto.getTeaching())
+		{
+			i.setUser(user);
+			
+			foundSem = false;
+			for(Semester s : mySemesters)
+			{
+				if(s.getFullName().equals(i.getSemester().getFullName()))
+				{
+					i.setSemester(s);
+					foundSem = true;
+				}
+			}
+			if(!foundSem)
+			{
+				mySemesters.add(i.getSemester());
+			}
+		}
+		user.setTeaching(dto.getTeaching());
+			
+		for(UClasses i : dto.getClasses())
+		{
+			i.setUser(user);
+			
+			foundSem = false;
+			for(Semester s : mySemesters)
+			{
+				if(s.getFullName().equals(i.getSemester().getFullName()))
+				{
+					i.setSemester(s);
+					foundSem = true;
+				}
+			}
+			if(!foundSem)
+			{
+				mySemesters.add(i.getSemester());
+			}
+		}
+		user.setClasses(dto.getClasses());
+			
+		for(UServices i : dto.getServiceActivity())
+		{
+			i.setUser(user);
+			
+			foundSem = false;
+			for(Semester s : mySemesters)
+			{
+				if(s.getFullName().equals(i.getSemester().getFullName()))
+				{
+					i.setSemester(s);
+					foundSem = true;
+				}
+			}
+			if(!foundSem)
+			{
+				mySemesters.add(i.getSemester());
+			}
+		}
+		user.setServiceActivity(dto.getServiceActivity());
 
         // set anything else ...
         return user;
@@ -188,6 +248,9 @@ public class UserService {
 				break;
 			case "semesterTerm":
 				result = genericRepository.findStringVals("Semester", "semesterName.semesterName"); //findStringVals("Semester", "name");
+				break;
+			case "level":
+				result = genericRepository.findStringVals("SLevel", "level");
 				break;
 			default:
 				result = new ArrayList<String>();

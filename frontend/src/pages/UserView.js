@@ -5,8 +5,10 @@ import { useLocation } from 'react-router-dom';
 import CsvDownloadButton from 'react-json-to-csv'
 
 import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
-Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button } from '@mui/material';
+Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton, LinearProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
@@ -25,6 +27,7 @@ function UserView() {
 		'load',
 		'rank',
 		'status',
+		'level',
 		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
@@ -83,6 +86,10 @@ function UserView() {
 			let currentField = updatedUserData;
 
 			for (let i = 0; i < pathArray.length - 1; i++) {
+				if(currentField[pathArray[i]] == undefined)
+				{
+					currentField[pathArray[i]] = {}; // add feild if it does not exist
+				}
 				currentField = currentField?.[pathArray[i]] || {};
 			}
 			
@@ -134,11 +141,12 @@ function UserView() {
 			id={id}
 			select
 			label={label}
-			variant="outlined"
+			variant="standard" //"outlined"
+			fullWidth
 			onChange={(event) => updateUserData(event.target.value, id)}
-			value={userData?.[id] || ''}
+			value={getUserField(id)}
 		>
-		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id)]?.map((option) => (
+		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id.split('.').slice(-1)[0])]?.map((option) => (
 			<MenuItem key={option} value={option}>
 				{option}
 			</MenuItem>
@@ -150,7 +158,8 @@ function UserView() {
 		<TextField 
 			id={id}
 			label={label}
-			variant="outlined"
+			variant="standard" //"outlined"
+			fullWidth
 			value={getUserField(id)}
 			onChange={(event) => updateUserData(event.target.value, id)}
 		/>
@@ -161,7 +170,8 @@ function UserView() {
 			id={id}
 			label={label}
 			type="number"
-			variant="outlined"
+			variant="standard" //"outlined"
+			fullWidth
 			value={getUserField(id)}
 			onChange={(event) => handleINTChange(id, event.target.value, null)}
 			InputProps={adornment && {
@@ -175,7 +185,8 @@ function UserView() {
 			id={id}
 			label={label}
 			type="number"
-			variant="outlined"
+			variant="standard" //"outlined"
+			fullWidth
 			value={getUserField(id)}
 			onChange={(event) => handleINTChange(id, event.target.value, Math.abs)}
 			InputProps={adornment && {
@@ -189,8 +200,9 @@ function UserView() {
 			id={id}
 			label={label}
 			type="number"
-			variant="outlined"
-			value={userData?.[id] / 1000 || ''}
+			variant="standard" //"outlined"
+			fullWidth
+			value={getUserField(id) / 1000 || ''}
 			onChange={(event) => handleMoneyChange(id, event.target.value)}
 			InputProps={adornment && {
 				startAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
@@ -198,11 +210,30 @@ function UserView() {
 		/>
 	);
 	
+	// ---- list operations ----
+	const addToListButton = (listFeild) => (
+		<IconButton aria-label="add item" color="primary" disabled={!(userData && userData?.[listFeild])} onClick={(event) => {
+			const theList = getUserField(listFeild)
+			updateUserData([ ...theList, {}], listFeild);
+		}}>
+			<AddIcon />
+		</IconButton>
+	);
+	
+	const deleteFromListButton = (listFeild, index) => (
+		<IconButton aria-label="add item" color="primary" onClick={(event) => {
+			let theList = getUserField(listFeild)
+			theList.splice(index, 1);
+			updateUserData(theList, listFeild);
+		}}>
+			<DeleteIcon />
+		</IconButton>
+	);
+	
 	// ----- webpage output -----
 	
-	return (
+	return userData ? (
 		<>
-	
 		<div>
 			<CsvDownloadButton data={[userData]} delimiter=',' />
 			<center>
@@ -213,7 +244,7 @@ function UserView() {
 				<Collapse in={open1} timeout="auto" unmountOnExit>
 					<Box
 						component="form"
-						sx={{ p:2, '& .MuiTextField-root': { m: 1, fontSize: 18, width: '30ch' }}}
+						sx={{ width: 1, p:2, '& .MuiTextField-root': { m: 1, fontSize: 18, width: '30ch' }}}
 						noValidate
 						autoComplete="off"
 					>
@@ -224,9 +255,7 @@ function UserView() {
 					<div>
 						{dropdownField("department", "Department")}
 						{dropdownField("rank", "Rank")}
-						<TextField id="outlined-select-role" disabled label="User Role" value={userData?.roleName || ''} />
-					</div>
-					<div>
+						<TextField id="standard-select-role" disabled label="User Role" variant="standard" value={userData?.roleName || ''} />
 						{dropdownField("load", "Load")}
 						{dropdownField("status", "Status")}
 					</div>
@@ -240,7 +269,7 @@ function UserView() {
 				<Collapse in={open2} timeout="auto" unmountOnExit>
 					<Box
 						component="form"
-						sx={{ p:2, '& .MuiTextField-root': { m: 1, fontSize: 18, width: '30ch' }}}
+						sx={{ p:2, '& .MuiTextField-root': { m: 1, fontSize: 18, width: '25ch' }}}
 						noValidate
 						autoComplete="off"
 					>
@@ -248,34 +277,27 @@ function UserView() {
 						{posIntField("journals", "Journals")}
 						{posIntField("books", "Books")}
 						{posIntField("chapters", "Chapters")}
-					</div>
-					<div>
 						{posIntField("conferences", "Conferences")}
 						{posIntField("patentInnovation", "Patents/Innovations")}
-					</div>
-					<div>
 						{posIntField("phdAdvised", "PhD Advised")}
 						{posIntField("phdCompleted", "PhD Completed")}
 						{posIntField("msCompleted", "Masters Completed")}
-					</div>
-					<div>
 						{posIntField("ugMentored", "Undergraduate Student Research Mentored")}
 						{posIntField("researchExperienceStudents", "Research Experience Students")}
 						{posIntField("researchExperienceTotal", "Research Experience Total")}
-					</div>
-					<div>
 						{moneyField("grants", "Grants", "$K")}
 						{posIntField("awards", "Awards")}
 					</div>
 					</Box>
 				</Collapse>
 			</Box>
+			
 			<Box sx={mainBoxFormat}>
 				Teaching Records
 				<ExpandCollapseButton isOpen={open3} onClick={() => setOpen3(!open3)} />
 				<Collapse in={open3} timeout="auto" unmountOnExit>
 				
-				<h5>Classes Taught</h5>
+			<h5>Classes Taught</h5>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
 						<TableHead>
@@ -295,100 +317,80 @@ function UserView() {
 							key={i}
 							>
 								<TableCell component="th" scope="row">
-									{row.catalog.className}
+									{freeTextField("classes." + i + ".catalog.className", "Class Name")}
 								</TableCell>
-							<TableCell align="right">{row.semester.fullName}</TableCell>
-							<TableCell align="right">{row.catalog.classType.classType}</TableCell>
-							<TableCell align="right">{row.catalog.creditHours}</TableCell>
-							<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
+								<TableCell align="right">{freeTextField("classes." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="right">{row?.catalog?.classType?.classType}</TableCell>
+								<TableCell align="right">{row?.catalog?.creditHours}</TableCell>
+								<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
+								<TableCell align="center">{deleteFromListButton("classes", i)}</TableCell>
 							</TableRow>
-					))) : null}
+					))) : null}	
 					</TableBody>
 					</Table>
 					</TableContainer>
-{/*Start of example*/}
-				<h5>Other Stuff</h5>
+					{addToListButton("classes")}
+			<h5>Other Stuff</h5>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-						<TableHead>
+					<TableBody>
+							{userData && userData?.teaching ? (userData.teaching.map((row, i) => (
 							<TableRow>
-								<TableCell>Semester:</TableCell>
-								<TableCell align="right">NewPreps</TableCell>
-								<TableCell align="right">NewDevs</TableCell>
-								<TableCell align="right">Overloads</TableCell>
+								<TableCell align="right">{freeTextField("teaching." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="right">{posIntField("teaching." + i + ".newPreps", "New Preps")}</TableCell>
+								<TableCell align="right">{posIntField("teaching." + i + ".newDevs", "New Devs")}</TableCell>
+								<TableCell align="right">{posIntField("teaching." + i + ".overloads", "Overloads")}</TableCell>
+								<TableCell align="center">{deleteFromListButton("teaching", i)}</TableCell>
 							</TableRow>
-						</TableHead>
-						<TableBody>
-						
-						{/*Start of table contents - Reading JSON in here?*/}
-						{userData && userData?.teaching ? (userData.teaching.map((row, i) => (
-							<TableRow
-							key={i}
-							>
-								<TableCell component="th" scope="row">
-									{row.semester.fullName}
-								</TableCell>
-							<TableCell align="right">{row.newPreps}</TableCell>
-							<TableCell align="right">{row.newDevs}</TableCell>
-							<TableCell align="right">{row.overloads}</TableCell>
-							</TableRow>
-					))) : null}
+						))) : null}
 					</TableBody>
 					</Table>
-					</TableContainer>
-{/*End of example*/}
-					
+				</TableContainer>
+				{addToListButton("teaching")}
 				</Collapse>
 			</Box>
+			
 			<Box sx={mainBoxFormat}>
 				Service Activity
 				<ExpandCollapseButton isOpen={open4} onClick={() => setOpen4(!open4)} />
+					
 				<Collapse in={open4} timeout="auto" unmountOnExit>
-
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650, fontSize: 30}} size="small" aria-label="a dense table">
-						<TableHead>
-							<TableRow>
-								<TableCell>Semester:</TableCell>
-								<TableCell align="right">Description</TableCell>
-								<TableCell align="right">Level</TableCell>
-							</TableRow>
-						</TableHead>
+					<TableContainer component={Paper}>
+						<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
 						<TableBody>
-						
-						{/*Start of table contents - Reading JSON in here? yes*/}
-						{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
-							<TableRow
-							key={i}
-							>
-								<TableCell component="th" scope="row">
-									{row.semester.fullName}
-								</TableCell>
-							<TableCell align="right">{row.description}</TableCell>
-							<TableCell align="right">{row.level.level}</TableCell>
+							{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
+							<TableRow>
+								<TableCell align="right">{freeTextField("serviceActivity." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="right">{freeTextField("serviceActivity." + i + ".description", "Description")}</TableCell>
+								<TableCell align="right">{dropdownField("serviceActivity." + i + ".level.level", "Level")}</TableCell>
+								<TableCell align="center">{deleteFromListButton("serviceActivity", i)}</TableCell>
 							</TableRow>
-					))) : null}
-					</TableBody>
-					</Table>
+						))) : null}
+						</TableBody>
+						</Table>
 					</TableContainer>
+					{addToListButton("serviceActivity")}
 				</Collapse>
 			</Box>
-			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)}>
+			<Button variant="contained" startIcon={<SendIcon />} onClick={(event) => postData(event)} disabled={!userData}>
 				Submit
 			</Button>
 			</center>
 			</div>
 			
-			<div>
-      <h1>RAW JSON Data</h1>
-      {userData ? (
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+			<h1>RAW JSON Data</h1>
+			<pre>{JSON.stringify(userData, null, 2)}</pre>
 		</>
-		);
-	}
+		
+	// error handling
+    ) : userNum ? (
+		<Box sx={{width: "100%"}}>
+			<LinearProgress />
+			<h1>Loading...</h1>
+		</Box>
+    ) : (
+		<p>Error - no user specified</p>
+	);
+}
 
 export default UserView;
