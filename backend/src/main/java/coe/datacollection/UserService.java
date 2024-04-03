@@ -42,7 +42,7 @@ public class UserService {
 		User nUser = convertFromDTO(userDTO);
 		System.out.println("id " + id);
 		System.out.println("uid " + cUser.getUserId());
-        cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
+        	cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
 		cUser.setLastName(nUser.getLastName() == null ? cUser.getLastName() : nUser.getLastName());
 		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
 		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
@@ -88,9 +88,9 @@ public class UserService {
 		userDTO.setDepartment(user.getDepartment().getDepartment());
         userDTO.setRoleName(user.getUserRole().getRoleName());
 		
-		userDTO.setLoad(user.getLoad() == null ? null : user.getLoad().getLoad());
-		userDTO.setRank(user.getRank() == null ? null : user.getRank().getRank());
-		userDTO.setStatus(user.getStatus() == null ? null : user.getStatus().getStatus());
+		userDTO.setLoad(user.getLoad().getLoad());
+		userDTO.setRank(user.getRank().getRank());
+		userDTO.setStatus(user.getStatus().getStatus());
 		
 		userDTO.setJournals(user.getJournals());
 		userDTO.setConferences(user.getConferences());
@@ -168,7 +168,9 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setTeaching(dto.getTeaching());
@@ -188,7 +190,9 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setClasses(dto.getClasses());
@@ -208,7 +212,9 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setServiceActivity(dto.getServiceActivity());
