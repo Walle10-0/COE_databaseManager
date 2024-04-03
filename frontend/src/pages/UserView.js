@@ -28,6 +28,7 @@ function UserView() {
 		'rank',
 		'status',
 		'level',
+		'semesterName',
 		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
@@ -303,10 +304,10 @@ function UserView() {
 						<TableHead>
 							<TableRow>
 								<TableCell>Class Name:</TableCell>
-								<TableCell align="right">Semester</TableCell>
+								<TableCell align="left">Semester</TableCell>
 								<TableCell align="right">Class Type</TableCell>
 								<TableCell align="right">Credits</TableCell>
-								<TableCell align="right">Students</TableCell>
+								<TableCell align="left">Students</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -319,11 +320,21 @@ function UserView() {
 								<TableCell component="th" scope="row">
 									{freeTextField("classes." + i + ".catalog.className", "Class Name")}
 								</TableCell>
-								<TableCell align="right">{freeTextField("classes." + i + ".semester.fullName", "Semester")}</TableCell>
-								<TableCell align="right">{row?.catalog?.classType?.classType}</TableCell>
-								<TableCell align="right">{row?.catalog?.creditHours}</TableCell>
-								<TableCell align="right">{posIntField("classes." + i + ".students", "Students")}</TableCell>
-								<TableCell align="center">{deleteFromListButton("classes", i)}</TableCell>
+								<TableCell align="left">
+									{dropdownField("classes." + i + ".semester.semesterName", "semester")} {posIntField("classes." + i + ".semester.year", "Year")}
+								</TableCell>
+								<TableCell align="right">
+									{row?.catalog?.classType?.classType}
+								</TableCell>
+								<TableCell align="right">
+									{row?.catalog?.creditHours}
+								</TableCell>
+								<TableCell align="right">
+									{posIntField("classes." + i + ".students", "Students")}
+								</TableCell>
+								<TableCell align="center">
+									{deleteFromListButton("classes", i)}
+								</TableCell>
 							</TableRow>
 					))) : null}	
 					</TableBody>
@@ -336,7 +347,7 @@ function UserView() {
 					<TableBody>
 							{userData && userData?.teaching ? (userData.teaching.map((row, i) => (
 							<TableRow>
-								<TableCell align="right">{freeTextField("teaching." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="left">{dropdownField("teaching." + i + ".semester.semesterName", "semester")} {posIntField("teaching." + i + ".semester.year", "Year")}</TableCell>
 								<TableCell align="right">{posIntField("teaching." + i + ".newPreps", "New Preps")}</TableCell>
 								<TableCell align="right">{posIntField("teaching." + i + ".newDevs", "New Devs")}</TableCell>
 								<TableCell align="right">{posIntField("teaching." + i + ".overloads", "Overloads")}</TableCell>
@@ -360,7 +371,7 @@ function UserView() {
 						<TableBody>
 							{userData && userData?.serviceActivity ? (userData.serviceActivity.map((row, i) => (
 							<TableRow>
-								<TableCell align="right">{freeTextField("serviceActivity." + i + ".semester.fullName", "Semester")}</TableCell>
+								<TableCell align="left">{dropdownField("serviceActivity." + i + ".semester.semesterName", "semester")} {posIntField("serviceActivity." + i + ".semester.year", "Year")}</TableCell>
 								<TableCell align="right">{freeTextField("serviceActivity." + i + ".description", "Description")}</TableCell>
 								<TableCell align="right">{dropdownField("serviceActivity." + i + ".level.level", "Level")}</TableCell>
 								<TableCell align="center">{deleteFromListButton("serviceActivity", i)}</TableCell>

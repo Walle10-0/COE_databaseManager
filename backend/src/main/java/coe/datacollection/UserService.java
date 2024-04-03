@@ -3,6 +3,7 @@ import coe.datacollection.EntityDependencies.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +131,7 @@ public class UserService {
         user.setLastName(dto.getLastName());
 
 		user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
-        user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
+        	user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
 		user.setLoad(genericRepository.findByString("CLoad", "load", dto.getLoad()));
 		user.setRank(genericRepository.findByString("URank", "rank", dto.getRank()));
 		user.setStatus(genericRepository.findByString("UStatus", "status", dto.getStatus()));
@@ -159,7 +160,7 @@ public class UserService {
 			foundSem = false;
 			for(Semester s : mySemesters)
 			{
-				if(s.getFullName().equals(i.getSemester().getFullName()))
+				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
 				{
 					i.setSemester(s);
 					foundSem = true;
@@ -179,7 +180,7 @@ public class UserService {
 			foundSem = false;
 			for(Semester s : mySemesters)
 			{
-				if(s.getFullName().equals(i.getSemester().getFullName()))
+				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
 				{
 					i.setSemester(s);
 					foundSem = true;
@@ -199,7 +200,7 @@ public class UserService {
 			foundSem = false;
 			for(Semester s : mySemesters)
 			{
-				if(s.getFullName().equals(i.getSemester().getFullName()))
+				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
 				{
 					i.setSemester(s);
 					foundSem = true;
@@ -246,8 +247,9 @@ public class UserService {
 			case "status":
 				result = genericRepository.findStringVals("UStatus", "status");
 				break;
-			case "semesterTerm":
-				result = genericRepository.findStringVals("Semester", "semesterName.semesterName"); //findStringVals("Semester", "name");
+			case "semesterName":
+				//result = genericRepository.findStringVals("Semester", "semesterName"); //findStringVals("Semester", "name");
+				result = Arrays.asList("Fall", "Spring", "Summer");
 				break;
 			case "level":
 				result = genericRepository.findStringVals("SLevel", "level");
