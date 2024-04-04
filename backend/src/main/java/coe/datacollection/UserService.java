@@ -47,9 +47,9 @@ public class UserService {
 		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
 		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
 		
-		cUser.setLoad(nUser.getLoad() == null ? cUser.getLoad() : nUser.getLoad());
-		cUser.setRank(nUser.getRank() == null ? cUser.getRank() : nUser.getRank());
-		cUser.setStatus(nUser.getStatus() == null ? cUser.getStatus() : nUser.getStatus());
+		userDTO.setLoad(user.getLoad() == null ? null : user.getLoad().getLoad());
+		userDTO.setRank(user.getRank() == null ? null : user.getRank().getRank());
+		userDTO.setStatus(user.getStatus() == null ? null : user.getStatus().getStatus());
 		
 		cUser.setJournals(nUser.getJournals());
 		cUser.setConferences(nUser.getConferences());
