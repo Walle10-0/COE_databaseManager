@@ -10,7 +10,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "_semester", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
 public class Semester {
@@ -30,29 +32,4 @@ public class Semester {
 	{
 		return semesterName + " " + year;
 	}
-
-    // Getters and setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getSemesterName() {
-        return semesterName;
-    }
-
-    public void setSemesterName(String semesterName) {
-        this.semesterName = semesterName;
-    }
 }

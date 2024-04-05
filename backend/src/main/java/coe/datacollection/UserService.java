@@ -9,40 +9,39 @@ import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository UserRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private GenericRepository genericRepository;
 
-    // create a new user
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user = UserRepository.save(user);
-        return convertToDTO(user);
-    }
+	// create a new user
+	public UserDTO createUser(UserDTO userDTO) {
+		User user = new User();
+		user.setFirstName(userDTO.getFirstName());
+		user.setLastName(userDTO.getLastName());
+		user = userRepository.save(user);
+		return convertToDTO(user);
+	}
 
-    // retrieve all users
-    public List<UserDTO> getAllUsers() {
-		return convertToDTO(UserRepository.findAll());
-    }
+	// retrieve all users
+	public List<UserDTO> getAllUsers() {
+		return convertToDTO(userRepository.findAll());
+	}
 
-    public UserDTO getUser(Long userId) {
-        User currentUser = UserRepository.findById(userId).orElse(null);
-        return currentUser != null ? convertToDTO(currentUser) : null;
-    }
+	public UserDTO getUser(Long userId) {
+		User currentUser = userRepository.findById(userId).orElse(null);
+		return currentUser != null ? convertToDTO(currentUser) : null;
+	}
 
-    // update an existing user
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
-        User cUser = UserRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id)); // Customize exception as
-                                                                                           // needed
+	// update an existing user
+	public UserDTO updateUser(Long id, UserDTO userDTO) {
+		User cUser = userRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("User not found with id: " + id)); // Customize exception as needed
 		User nUser = convertFromDTO(userDTO);
 		System.out.println("id " + id);
 		System.out.println("uid " + cUser.getUserId());
-        cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
+		cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
 		cUser.setLastName(nUser.getLastName() == null ? cUser.getLastName() : nUser.getLastName());
 		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
 		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
@@ -69,24 +68,24 @@ public class UserService {
 		cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
 		cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
-        cUser = UserRepository.save(cUser);
-        return convertToDTO(cUser);
-    }
+		cUser = userRepository.save(cUser);
+		return convertToDTO(cUser);
+	}
 
-    // delete existing user
-    public void deleteUser(Long id) {
-        UserRepository.deleteById(id);
-    }
-
-    // convert User to UserDTO
-    private UserDTO convertToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
+	// delete existing user
+	public void deleteUser(Long id) {
+		userRepository.deleteById(id);
+	}
+	
+	// convert User to UserDTO
+	private UserDTO convertToDTO(User user) {
+		UserDTO userDTO = new UserDTO();
 		
-        userDTO.setId(user.getUserId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
+		userDTO.setId(user.getUserId());
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
 		userDTO.setDepartment(user.getDepartment().getDepartment());
-        userDTO.setRoleName(user.getUserRole().getRoleName());
+		userDTO.setRoleName(user.getUserRole().getRoleName());
 		
 		userDTO.setLoad(user.getLoad() == null ? null : user.getLoad().getLoad());
 		userDTO.setRank(user.getRank() == null ? null : user.getRank().getRank());
@@ -110,28 +109,28 @@ public class UserService {
 		userDTO.setClasses(user.getClasses());
 		userDTO.setServiceActivity(user.getServiceActivity());
 		
-        return userDTO;
-    }
+		return userDTO;
+	}
 	
 	// bulk convert
 	private List<UserDTO> convertToDTO(List<User> user) {
-        List<UserDTO> DTOList = new ArrayList<UserDTO>();
-        for (User current : user) {
+		List<UserDTO> DTOList = new ArrayList<UserDTO>();
+		for (User current : user) {
 			DTOList.add(convertToDTO(current));
 		}
 		
-        return DTOList;
-    }
+		return DTOList;
+	}
 
-    // convert UserDTO to User
-    public User convertFromDTO(UserDTO dto) {
-        User user = new User();
-        user.setUserId(dto.getId());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
+	// convert UserDTO to User
+	public User convertFromDTO(UserDTO dto) {
+		User user = new User();
+		user.setUserId(dto.getId());
+		user.setFirstName(dto.getFirstName());
+		user.setLastName(dto.getLastName());
 
 		user.setDepartment(genericRepository.findByString("Department", "deptName", dto.getDepartment()));
-        	user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
+		user.setUserRole(genericRepository.findByString("UserRole", "roleName", dto.getRoleName()));
 		user.setLoad(genericRepository.findByString("CLoad", "load", dto.getLoad()));
 		user.setRank(genericRepository.findByString("URank", "rank", dto.getRank()));
 		user.setStatus(genericRepository.findByString("UStatus", "status", dto.getStatus()));
@@ -168,7 +167,9 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setTeaching(dto.getTeaching());
@@ -188,7 +189,9 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setClasses(dto.getClasses());
@@ -208,14 +211,16 @@ public class UserService {
 			}
 			if(!foundSem)
 			{
-				mySemesters.add(i.getSemester());
+				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				i.setSemester(theSemester);
+				mySemesters.add(theSemester);
 			}
 		}
 		user.setServiceActivity(dto.getServiceActivity());
 
-        // set anything else ...
-        return user;
-    }
+		// set anything else ...
+		return user;
+	}
 
     // export current user to JSON
     public String exportCurrentUserToJSON(Long currentUserId) throws Exception {
@@ -227,7 +232,7 @@ public class UserService {
     }
 	
 	public List<UserDTO> findUsersByDepartmentId(int id) {
-		return convertToDTO(UserRepository.findUsersByDepartmentId(id));
+		return convertToDTO(userRepository.findUsersByDepartmentId(id));
 	}
 	
 	// get All Values for dropdown
