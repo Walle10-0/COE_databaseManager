@@ -18,8 +18,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Data
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"uid"})})
-//@SecondaryTable(name="research_scholarly", 
-//        pkJoinColumns=@PrimaryKeyJoinColumn(name="uid"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
