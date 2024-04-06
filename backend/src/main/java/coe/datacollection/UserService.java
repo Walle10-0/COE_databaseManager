@@ -199,6 +199,7 @@ public class UserService {
 		for(UServices i : dto.getServiceActivity())
 		{
 			i.setUser(user);
+			i.setLevel(genericRepository.findByString("SLevel", "level", i.getLevel().getLevel()));
 			
 			foundSem = false;
 			for(Semester s : mySemesters)
