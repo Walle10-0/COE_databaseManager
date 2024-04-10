@@ -121,6 +121,28 @@ public class UserService {
 		
 		return DTOList;
 	}
+	
+	// function for repeated code
+	private Semester findSemester(Semester currentSemester, List<Semester> mySemesters)
+	{
+		Semester theSemester = null;
+		if (currentSemester != null && currentSemester.getSemesterName() != null && currentSemester.getYear() >= 1970)
+		{
+			for(Semester s : mySemesters)
+			{
+				if(s.getFullName().equalsIgnoreCase(currentSemester.getFullName()))
+				{
+					theSemester = s;
+				}
+			}
+			if(theSemester == null)
+			{
+				theSemester = genericRepository.findSemester(currentSemester.getSemesterName(), currentSemester.getYear());
+				mySemesters.add(theSemester);
+			}
+		}
+		return theSemester;
+	}
 
 	// convert UserDTO to User
 	public User convertFromDTO(UserDTO dto) {
@@ -150,74 +172,72 @@ public class UserService {
 		user.setAwards(dto.getAwards());
 		
 		List<Semester> mySemesters = new ArrayList<Semester>();
-		boolean foundSem;
+		Semester theSemester;
 		
+		List<Teaching> finalTeaching = new ArrayList<Teaching>(dto.getTeaching()); // need to clone in order to prevent problems
 		for(Teaching i : dto.getTeaching())
 		{
 			i.setUser(user);
 			
-			foundSem = false;
-			for(Semester s : mySemesters)
+			theSemester = findSemester(i.getSemester(), mySemesters);
+			if(theSemester != null)
 			{
-				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
-				{
-					i.setSemester(s);
-					foundSem = true;
-				}
-			}
-			if(!foundSem)
-			{
-				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
 				i.setSemester(theSemester);
-				mySemesters.add(theSemester);
+			}
+			else
+			{
+				finalTeaching.remove(i);
 			}
 		}
-		user.setTeaching(dto.getTeaching());
+		user.setTeaching(finalTeaching);
 			
+		List<UClasses> finalClasses = new ArrayList<UClasses>(dto.getClasses());
 		for(UClasses i : dto.getClasses())
 		{
 			i.setUser(user);
 			
-			foundSem = false;
-			for(Semester s : mySemesters)
+			theSemester = findSemester(i.getSemester(), mySemesters);
+			if(theSemester != null)
 			{
-				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
-				{
-					i.setSemester(s);
-					foundSem = true;
-				}
-			}
-			if(!foundSem)
-			{
-				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
 				i.setSemester(theSemester);
-				mySemesters.add(theSemester);
+			}
+			else
+			{
+				finalClasses.remove(i);
 			}
 		}
-		user.setClasses(dto.getClasses());
+		user.setClasses(finalClasses);
 			
+		List<UServices> finalServices = new ArrayList<UServices>(dto.getServiceActivity());
 		for(UServices i : dto.getServiceActivity())
 		{
 			i.setUser(user);
-			i.setLevel(genericRepository.findByString("SLevel", "level", i.getLevel().getLevel()));
 			
-			foundSem = false;
-			for(Semester s : mySemesters)
+			if (i.getLevel() != null)
 			{
-				if(s.getFullName().equalsIgnoreCase(i.getSemester().getFullName()))
-				{
-					i.setSemester(s);
-					foundSem = true;
-				}
+				i.setLevel(genericRepository.findByString("SLevel", "level", i.getLevel().getLevel()));
 			}
-			if(!foundSem)
+			else
 			{
-				Semester theSemester = genericRepository.findSemester(i.getSemester().getSemesterName(), i.getSemester().getYear());
+				finalServices.remove(i);
+			}
+			
+			if (i.getDescription() == null)
+			{
+				i.setDescription(" ");
+			}
+			
+			theSemester = findSemester(i.getSemester(), mySemesters);
+			if(theSemester != null)
+			{
 				i.setSemester(theSemester);
-				mySemesters.add(theSemester);
+			}
+			else
+			{
+				finalServices.remove(i);
 			}
 		}
-		user.setServiceActivity(dto.getServiceActivity());
+		user.setServiceActivity(finalServices);
 
 		// set anything else ...
 		return user;
