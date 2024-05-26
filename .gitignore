@@ -1,9 +1,27 @@
 HELP.md
 target/
 node_modules/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# jar not neccesary 
+# https://maven.apache.org/wrapper/
+.mvn/wrapper/maven-wrapper.jar
+
+### Logs ###
+logs
+*.log
+npm-debug.log*
+
+### maven ###
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
 
 ### STS ###
 .apt_generated

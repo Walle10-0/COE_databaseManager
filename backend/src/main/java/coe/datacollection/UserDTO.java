@@ -1,6 +1,5 @@
 package coe.datacollection;
 
-import coe.datacollection.EntityDependencies.Teaching;
 import coe.datacollection.EntityDependencies.UClasses;
 import coe.datacollection.EntityDependencies.UServices;
 
@@ -38,7 +37,6 @@ public class UserDTO {
     private int ugMentored;
 	
 	// for testing
-	private List<Teaching> teaching;
     private List<UClasses> classes;
     private List<UServices> serviceActivity;
 }
