@@ -4,7 +4,7 @@ import ExpandCollapseButton from './ExpandCollapseButton';
 import { useLocation } from 'react-router-dom';
 import CsvDownloadButton from 'react-json-to-csv'
 
-import { Box, TextField, Select, MenuItem, InputLabel, Collapse, InputAdornment,
+import { Box, TextField, Select, Autocomplete, MenuItem, InputLabel, Collapse, InputAdornment,
 Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton, LinearProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
@@ -138,21 +138,19 @@ function UserView() {
 	// ----- feilds in GUI -----
 	
 	const dropdownField = (id, label) => (
-		<TextField
+		<Autocomplete
+			disablePortal
+			autoComplete
 			id={id}
-			select
-			label={label}
-			variant="standard" //"outlined"
-			fullWidth
-			onChange={(event) => updateUserData(event.target.value, id)}
 			value={getUserField(id)}
-		>
-		{(dropdownData && dropdownData?.length > 0) ? (dropdownData[dropdownNames.indexOf(id.split('.').slice(-1)[0])]?.map((option) => (
-			<MenuItem key={option} value={option}>
-				{option}
-			</MenuItem>
-		))) : null}
-		</TextField>
+			onChange={(event: any, newValue: FilmOptionType | null) => updateUserData(newValue, id)}
+			options={(dropdownData && dropdownData?.length > 0) ? dropdownData[dropdownNames.indexOf(id.split('.').slice(-1)[0])] : null}
+			renderInput={(params) => <TextField {...params}
+										label={label}
+										variant="standard" //"outlined"	
+										fullWidth										
+									/>}
+		/>
 	);
 	
 	const freeTextField = (id, label) => (
