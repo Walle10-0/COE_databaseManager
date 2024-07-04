@@ -40,4 +40,7 @@ public class UClasses {
 
     @Column(name = "students")
     private int students;
+	
+	@Column(name = "repeat_type")
+    private String repeatType;
 }

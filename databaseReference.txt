@@ -153,15 +153,16 @@ describe _user_role; select * from _user_role;
 +----+-----------------+
 
 describe classes;
-+-----------+-------------------+------+-----+---------+----------------+
-| Field     | Type              | Null | Key | Default | Extra          |
-+-----------+-------------------+------+-----+---------+----------------+
-| uid       | int unsigned      | NO   | MUL | NULL    |                |
-| _semester | smallint unsigned | NO   | MUL | NULL    |                |
-| _catalog  | smallint unsigned | NO   | MUL | NULL    |                |
-| students  | smallint unsigned | YES  |     | 0       |                |
-| id        | int unsigned      | NO   | PRI | NULL    | auto_increment |
-+-----------+-------------------+------+-----+---------+----------------+
++-------------+-------------------+------+-----+---------+----------------+
+| Field       | Type              | Null | Key | Default | Extra          |
++-------------+-------------------+------+-----+---------+----------------+
+| uid         | int unsigned      | NO   | MUL | NULL    |                |
+| _semester   | smallint unsigned | NO   | MUL | NULL    |                |
+| _catalog    | smallint unsigned | NO   | MUL | NULL    |                |
+| students    | smallint unsigned | YES  |     | 0       |                |
+| repeat_type | tinytext          | YES  |     | NULL    |                |
+| id          | int unsigned      | NO   | PRI | NULL    | auto_increment |
++-------------+-------------------+------+-----+---------+----------------+
 
 describe service_activity;
 +-------------+-------------------+------+-----+---------+----------------+
@@ -173,17 +174,6 @@ describe service_activity;
 | _level      | tinyint unsigned  | NO   | MUL | NULL    |                |
 | id          | int unsigned      | NO   | PRI | NULL    | auto_increment |
 +-------------+-------------------+------+-----+---------+----------------+
-
-describe teaching;
-+-----------+-------------------+------+-----+---------+-------+
-| Field     | Type              | Null | Key | Default | Extra |
-+-----------+-------------------+------+-----+---------+-------+
-| uid       | int unsigned      | NO   | PRI | NULL    |       |
-| _semester | smallint unsigned | NO   | PRI | NULL    |       |
-| new_preps | smallint unsigned | YES  |     | 0       |       |
-| new_devs  | smallint unsigned | YES  |     | 0       |       |
-| overloads | smallint unsigned | YES  |     | 0       |       |
-+-----------+-------------------+------+-----+---------+-------+
 
 describe users;
 +-------------------+--------------------+------+-----+---------+----------------+

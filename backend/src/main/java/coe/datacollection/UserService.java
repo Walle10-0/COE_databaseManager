@@ -64,7 +64,6 @@ public class UserService {
 		cUser.setUgMentored(nUser.getUgMentored());
 		cUser.setAwards(nUser.getAwards());
 		
-		cUser.setTeaching(nUser.getTeaching() == null ? cUser.getTeaching() : nUser.getTeaching());
 		cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
 		cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
 
@@ -104,8 +103,7 @@ public class UserService {
 		userDTO.setPatentInnovation(user.getPatentInnovation());
 		userDTO.setUgMentored(user.getUgMentored());
 		userDTO.setAwards(user.getAwards());
-		
-		userDTO.setTeaching(user.getTeaching());
+
 		userDTO.setClasses(user.getClasses());
 		userDTO.setServiceActivity(user.getServiceActivity());
 		
@@ -173,23 +171,6 @@ public class UserService {
 		
 		List<Semester> mySemesters = new ArrayList<Semester>();
 		Semester theSemester;
-		
-		List<Teaching> finalTeaching = new ArrayList<Teaching>(dto.getTeaching()); // need to clone in order to prevent problems
-		for(Teaching i : dto.getTeaching())
-		{
-			i.setUser(user);
-			
-			theSemester = findSemester(i.getSemester(), mySemesters);
-			if(theSemester != null)
-			{
-				i.setSemester(theSemester);
-			}
-			else
-			{
-				finalTeaching.remove(i);
-			}
-		}
-		user.setTeaching(finalTeaching);
 			
 		List<UClasses> finalClasses = new ArrayList<UClasses>(dto.getClasses());
 		for(UClasses i : dto.getClasses())
@@ -275,10 +256,13 @@ public class UserService {
 				break;
 			case "semesterName":
 				//result = genericRepository.findStringVals("Semester", "semesterName"); //findStringVals("Semester", "name");
-				result = Arrays.asList("Fall", "Spring", "Summer");
+				result = Arrays.asList("Fall", "Spring", "Summer", "Academic Year");
 				break;
 			case "level":
 				result = genericRepository.findStringVals("SLevel", "level");
+				break;
+			case "repeatType":
+				result = Arrays.asList("New Prep", "New Dev", "Repeat");
 				break;
 			default:
 				result = new ArrayList<String>();

@@ -1,6 +1,5 @@
 package coe.datacollection;
 
-import coe.datacollection.EntityDependencies.Teaching;
 import coe.datacollection.EntityDependencies.UClasses;
 import coe.datacollection.EntityDependencies.UServices;
 import coe.datacollection.EntityDependencies.CLoad;
@@ -97,11 +96,6 @@ public class User {
 
     @Column(name = "ug_mentored")
     private int ugMentored;
-
-    // complex stuff
-	@JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Teaching> teaching;
 
 	@JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

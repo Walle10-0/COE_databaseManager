@@ -4,7 +4,7 @@ import ExpandCollapseButton from './ExpandCollapseButton';
 import { useLocation } from 'react-router-dom';
 import CsvDownloadButton from 'react-json-to-csv'
 
-import { Box, TextField, Select, Autocomplete, MenuItem, InputLabel, Collapse, InputAdornment,
+import { Box, TextField, Autocomplete, InputLabel, Collapse, InputAdornment,
 Table, Paper, TableBody, TableHead, TableRow, TableCell, TableContainer, Button, IconButton, LinearProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
@@ -29,6 +29,7 @@ function UserView() {
 		'status',
 		'level',
 		'semesterName',
+		'repeatType',
 		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
@@ -294,76 +295,57 @@ function UserView() {
 			<Box sx={mainBoxFormat}>
 				Teaching Records
 				<ExpandCollapseButton isOpen={open3} onClick={() => setOpen3(!open3)} />
-				<Collapse in={open3} timeout="auto" unmountOnExit>
-				
-			<h5>Classes Taught</h5>
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-						<TableHead>
-							<TableRow>
-								<TableCell>Class Name:</TableCell>
-								<TableCell align="left">Semester</TableCell>
-								<TableCell align="right">Class Type</TableCell>
-								<TableCell align="right">Credits</TableCell>
-								<TableCell align="left">Students</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-						
-						{/*Start of table contents - Reading JSON*/}
-						{userData && userData?.classes ? (userData.classes.map((row, i) => (
-							<TableRow
-							key={i}
-							>
-								<TableCell component="th" scope="row">
-									{freeTextField("classes." + i + ".catalog.className", "Class Name")}
-								</TableCell>
-								<TableCell align="left">
-									{dropdownField("classes." + i + ".semester.semesterName", "semester")} {posIntField("classes." + i + ".semester.year", "Year")}
-								</TableCell>
-								<TableCell align="right">
-									{row?.catalog?.classType?.classType}
-								</TableCell>
-								<TableCell align="right">
-									{row?.catalog?.creditHours}
-								</TableCell>
-								<TableCell align="right">
-									{posIntField("classes." + i + ".students", "Students")}
-								</TableCell>
-								<TableCell align="center">
-									{deleteFromListButton("classes", i)}
-								</TableCell>
-							</TableRow>
-					))) : null}	
-					</TableBody>
-					</Table>
+				<Collapse in={open3} timeout="auto" unmountOnExit sx={{pt:2}}>
+					<TableContainer component={Paper}>
+						<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+							<TableHead>
+								<TableRow>
+									<TableCell>Class Name:</TableCell>
+									<TableCell align="left">Semester</TableCell>
+									<TableCell align="right">Class Type</TableCell>
+									<TableCell align="right">Credits</TableCell>
+									<TableCell align="left">Students</TableCell>
+									<TableCell align="left">Type</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+							{/*Start of table contents - Reading JSON*/}
+							{userData && userData?.classes ? (userData.classes.map((row, i) => (
+								<TableRow key={i}>
+									<TableCell component="th" scope="row">
+										{freeTextField("classes." + i + ".catalog.className", "Class Name")}
+									</TableCell>
+									<TableCell align="left">
+										{dropdownField("classes." + i + ".semester.semesterName", "semester")} {posIntField("classes." + i + ".semester.year", "Year")}
+									</TableCell>
+									<TableCell align="right">
+										{row?.catalog?.classType?.classType}
+									</TableCell>
+									<TableCell align="right">
+										{row?.catalog?.creditHours}
+									</TableCell>
+									<TableCell align="right">
+										{posIntField("classes." + i + ".students", "Students")}
+									</TableCell>
+									<TableCell align="right">
+										{dropdownField("classes." + i + ".repeatType", "Type")}
+									</TableCell>
+									<TableCell align="center">
+										{deleteFromListButton("classes", i)}
+									</TableCell>
+								</TableRow>
+							))) : null}	
+							</TableBody>
+						</Table>
 					</TableContainer>
 					{addToListButton("classes")}
-			<h5>Other Stuff</h5>
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-					<TableBody>
-							{userData && userData?.teaching ? (userData.teaching.map((row, i) => (
-							<TableRow>
-								<TableCell align="left">{dropdownField("teaching." + i + ".semester.semesterName", "semester")} {posIntField("teaching." + i + ".semester.year", "Year")}</TableCell>
-								<TableCell align="right">{posIntField("teaching." + i + ".newPreps", "New Preps")}</TableCell>
-								<TableCell align="right">{posIntField("teaching." + i + ".newDevs", "New Devs")}</TableCell>
-								<TableCell align="right">{posIntField("teaching." + i + ".overloads", "Overloads")}</TableCell>
-								<TableCell align="center">{deleteFromListButton("teaching", i)}</TableCell>
-							</TableRow>
-						))) : null}
-					</TableBody>
-					</Table>
-				</TableContainer>
-				{addToListButton("teaching")}
 				</Collapse>
 			</Box>
 			
 			<Box sx={mainBoxFormat}>
 				Service Activity
 				<ExpandCollapseButton isOpen={open4} onClick={() => setOpen4(!open4)} />
-					
-				<Collapse in={open4} timeout="auto" unmountOnExit>
+				<Collapse in={open4} timeout="auto" unmountOnExit sx={{pt:2}}>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
 						<TableBody>
