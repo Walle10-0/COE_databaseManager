@@ -264,6 +264,9 @@ public class UserService {
 			case "repeatType":
 				result = Arrays.asList("New Prep", "New Dev", "Repeat");
 				break;
+			case "serviceRole":
+				result = Arrays.asList("Chair", "Member", "Other");
+				break;
 			default:
 				result = new ArrayList<String>();
 				break;

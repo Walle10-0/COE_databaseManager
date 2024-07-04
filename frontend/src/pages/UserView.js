@@ -30,6 +30,7 @@ function UserView() {
 		'level',
 		'semesterName',
 		'repeatType',
+		'serviceRole',
 		];
 	const userNum = state?.userNum;
 	const mainBoxFormat = { fontSize: 36, fontWeight: 'bold', border: 2, borderRadius: 4, borderColor: 'divider', padding:2, margin:2 };
@@ -354,6 +355,7 @@ function UserView() {
 								<TableCell align="left">{dropdownField("serviceActivity." + i + ".semester.semesterName", "semester")} {posIntField("serviceActivity." + i + ".semester.year", "Year")}</TableCell>
 								<TableCell align="right">{freeTextField("serviceActivity." + i + ".description", "Description")}</TableCell>
 								<TableCell align="right">{dropdownField("serviceActivity." + i + ".level.level", "Level")}</TableCell>
+								<TableCell align="right">{dropdownField("serviceActivity." + i + ".serviceRole", "Role")}</TableCell>
 								<TableCell align="center">{deleteFromListButton("serviceActivity", i)}</TableCell>
 							</TableRow>
 						))) : null}
