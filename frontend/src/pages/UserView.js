@@ -88,7 +88,7 @@ function UserView() {
 			let currentField = updatedUserData;
 
 			for (let i = 0; i < pathArray.length - 1; i++) {
-				if(currentField[pathArray[i]] == undefined)
+				if(currentField[pathArray[i]] === undefined)
 				{
 					currentField[pathArray[i]] = {}; // add feild if it does not exist
 				}
