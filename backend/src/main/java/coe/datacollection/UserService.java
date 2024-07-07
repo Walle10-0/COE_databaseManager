@@ -41,32 +41,9 @@ public class UserService {
 		User nUser = convertFromDTO(userDTO);
 		System.out.println("id " + id);
 		System.out.println("uid " + cUser.getUserId());
-		cUser.setFirstName(nUser.getFirstName() == null ? cUser.getFirstName() : nUser.getFirstName());
-		cUser.setLastName(nUser.getLastName() == null ? cUser.getLastName() : nUser.getLastName());
-		cUser.setDepartment(nUser.getDepartment() == null ? cUser.getDepartment() : nUser.getDepartment());
-		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
 		
-		cUser.setLoad(nUser.getLoad() == null ? cUser.getLoad() : nUser.getLoad());
-		cUser.setRank(nUser.getRank() == null ? cUser.getRank() : nUser.getRank());
-		cUser.setStatus(nUser.getStatus() == null ? cUser.getStatus() : nUser.getStatus());
+		overwriteUser(cUser, nUser);
 		
-		cUser.setJournals(nUser.getJournals());
-		cUser.setConferences(nUser.getConferences());
-		cUser.setBooks(nUser.getBooks());
-		cUser.setChapters(nUser.getChapters());
-		cUser.setGrants(nUser.getGrants());
-		cUser.setResearchExperienceTotal(nUser.getResearchExperienceTotal());
-		cUser.setResearchExperienceStudents(nUser.getResearchExperienceStudents());
-		cUser.setPhdAdvised(nUser.getPhdAdvised());
-		cUser.setPhdCompleted(nUser.getPhdCompleted());
-		cUser.setMsCompleted(nUser.getMsCompleted());
-		cUser.setPatentInnovation(nUser.getPatentInnovation());
-		cUser.setUgMentored(nUser.getUgMentored());
-		cUser.setAwards(nUser.getAwards());
-		
-		cUser.setClasses(nUser.getClasses() == null ? cUser.getClasses() : nUser.getClasses());
-		cUser.setServiceActivity(nUser.getServiceActivity() == null ? cUser.getServiceActivity() : nUser.getServiceActivity());
-
 		cUser = userRepository.save(cUser);
 		return convertToDTO(cUser);
 	}
@@ -74,6 +51,102 @@ public class UserService {
 	// delete existing user
 	public void deleteUser(Long id) {
 		userRepository.deleteById(id);
+	}
+	
+	private User overwriteUser(User toUser, User fromUser)  {
+		toUser.setFirstName(fromUser.getFirstName() == null ? toUser.getFirstName() : fromUser.getFirstName());
+		toUser.setLastName(fromUser.getLastName() == null ? toUser.getLastName() : fromUser.getLastName());
+		toUser.setDepartment(fromUser.getDepartment() == null ? toUser.getDepartment() : fromUser.getDepartment());
+		//cUser.setRoleName(nUser.getUserRole() == null ? cUser.getUserRole() : nUser.getUserRole());
+		
+		toUser.setLoad(fromUser.getLoad() == null ? toUser.getLoad() : fromUser.getLoad());
+		toUser.setRank(fromUser.getRank() == null ? toUser.getRank() : fromUser.getRank());
+		toUser.setStatus(fromUser.getStatus() == null ? toUser.getStatus() : fromUser.getStatus());
+		
+		toUser.setJournals(fromUser.getJournals());
+		toUser.setConferences(fromUser.getConferences());
+		toUser.setBooks(fromUser.getBooks());
+		toUser.setChapters(fromUser.getChapters());
+		toUser.setGrants(fromUser.getGrants());
+		toUser.setResearchExperienceTotal(fromUser.getResearchExperienceTotal());
+		toUser.setResearchExperienceStudents(fromUser.getResearchExperienceStudents());
+		toUser.setPhdAdvised(fromUser.getPhdAdvised());
+		toUser.setPhdCompleted(fromUser.getPhdCompleted());
+		toUser.setMsCompleted(fromUser.getMsCompleted());
+		toUser.setPatentInnovation(fromUser.getPatentInnovation());
+		toUser.setUgMentored(fromUser.getUgMentored());
+		toUser.setAwards(fromUser.getAwards());
+		
+		List<Semester> mySemesters = new ArrayList<Semester>();
+		Semester theSemester;
+		
+		if (fromUser.getClasses() != null)
+		{
+			if (toUser.getClasses() == null)
+			{
+				toUser.setClasses(new ArrayList<UClasses>());
+			}
+			else
+			{
+				toUser.getClasses().clear();
+			}
+		
+			List<UClasses> finalClasses = toUser.getClasses();
+			for(UClasses i : fromUser.getClasses())
+			{
+				i.setUser(toUser);
+			
+				theSemester = findSemester(i.getSemester(), mySemesters);
+				if(theSemester != null)
+				{
+					i.setSemester(theSemester);
+					finalClasses.add(i);
+				}
+				else
+				{
+					finalClasses.remove(i);
+					i.setUser(null);
+				}
+			}
+		}
+		
+		if (fromUser.getServiceActivity() != null)
+		{
+			if (toUser.getServiceActivity() == null)
+			{
+				toUser.setServiceActivity(new ArrayList<UServices>());
+			}
+			else
+			{
+				toUser.getServiceActivity().clear();
+			}
+		
+			List<UServices> finalServices = toUser.getServiceActivity();
+			for(UServices i : fromUser.getServiceActivity())
+			{
+				i.setUser(toUser);
+			
+				if (i.getDescription() == null)
+				{
+					i.setDescription(" ");
+				}
+			
+				theSemester = findSemester(i.getSemester(), mySemesters);
+				if(theSemester == null || i.getLevel() == null)
+				{
+					finalServices.remove(i);
+					i.setUser(null);
+				}
+				else
+				{
+					i.setLevel(genericRepository.findByString("SLevel", "level", i.getLevel().getLevel()));
+					i.setSemester(theSemester);
+					finalServices.add(i);
+				}
+			}
+		}
+		
+		return toUser;
 	}
 	
 	// convert User to UserDTO
@@ -169,56 +242,8 @@ public class UserService {
 		user.setUgMentored(dto.getUgMentored());
 		user.setAwards(dto.getAwards());
 		
-		List<Semester> mySemesters = new ArrayList<Semester>();
-		Semester theSemester;
-			
-		List<UClasses> finalClasses = new ArrayList<UClasses>(dto.getClasses());
-		for(UClasses i : dto.getClasses())
-		{
-			i.setUser(user);
-			
-			theSemester = findSemester(i.getSemester(), mySemesters);
-			if(theSemester != null)
-			{
-				i.setSemester(theSemester);
-			}
-			else
-			{
-				finalClasses.remove(i);
-			}
-		}
-		user.setClasses(finalClasses);
-			
-		List<UServices> finalServices = new ArrayList<UServices>(dto.getServiceActivity());
-		for(UServices i : dto.getServiceActivity())
-		{
-			i.setUser(user);
-			
-			if (i.getLevel() != null)
-			{
-				i.setLevel(genericRepository.findByString("SLevel", "level", i.getLevel().getLevel()));
-			}
-			else
-			{
-				finalServices.remove(i);
-			}
-			
-			if (i.getDescription() == null)
-			{
-				i.setDescription(" ");
-			}
-			
-			theSemester = findSemester(i.getSemester(), mySemesters);
-			if(theSemester != null)
-			{
-				i.setSemester(theSemester);
-			}
-			else
-			{
-				finalServices.remove(i);
-			}
-		}
-		user.setServiceActivity(finalServices);
+		user.setClasses(dto.getClasses());
+		user.setServiceActivity(dto.getServiceActivity());
 
 		// set anything else ...
 		return user;
