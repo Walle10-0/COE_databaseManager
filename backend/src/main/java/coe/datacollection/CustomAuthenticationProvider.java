@@ -33,8 +33,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		String passwordCheck = user.getPin();
 
 		System.out.println("user : " + user.getFirstName());
-		System.out.println("attempt : " + passwordCheck);
-		System.out.println("actual : " + password);
+		System.out.println("attempt : " + password);
+		System.out.println("actual : " + passwordCheck);
   
         if (user == null || !password.equals(passwordCheck)) { 
 			System.out.println("password failed");
