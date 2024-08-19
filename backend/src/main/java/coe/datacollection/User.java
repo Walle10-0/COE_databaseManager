@@ -31,7 +31,7 @@ public class User {
     private String firstName;
 
     @Column(name = "pin")
-    private char[] pin;
+    private String pin;
 
     //@Column(name = "salt")
     //private char[] salt;

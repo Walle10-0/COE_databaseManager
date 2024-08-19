@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   
         User user = userRep.findById(Long.parseLong(username)).orElse(null);
 
-		String passwordCheck = new String(user.getPin());
+		String passwordCheck = user.getPin();
 
 		System.out.println("user : " + user.getFirstName());
 		System.out.println("attempt : " + passwordCheck);
