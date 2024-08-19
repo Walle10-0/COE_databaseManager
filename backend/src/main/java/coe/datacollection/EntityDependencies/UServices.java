@@ -10,8 +10,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.CascadeType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "service_activity")
 public class UServices {
@@ -26,7 +30,7 @@ public class UServices {
 	@JsonBackReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "_semester")
     private Semester semester;
 
@@ -36,52 +40,7 @@ public class UServices {
 
     @Column(name = "description")
     private String description;
-
-    // Constructors
-
-    public UServices() {
-        // Default constructor
-    }
-
-    // Getters and Setters
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
-    }
-
-    public SLevel getLevel() {
-        return level;
-    }
-
-    public void setLevel(SLevel level) {
-        this.level = level;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	
+	@Column(name = "service_role")
+    private String serviceRole;
 }

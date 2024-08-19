@@ -5,15 +5,22 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+//import jakarta.persistence.Transient;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "_semester", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
 public class Semester {
     @Id
+	@JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
@@ -21,37 +28,12 @@ public class Semester {
     @Column(name = "_year")
     private int year;
 
-    @ManyToOne
-    @JoinColumn(name = "_semester_name")
-    private SemesterName semesterName;
-
-    // Getters and setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public SemesterName getSemesterName() {
-        return semesterName;
-    }
-
-    public void setSemesterName(SemesterName semesterName) {
-        this.semesterName = semesterName;
-    }
-	
+    @Column(name = "semester_name")
+    private String semesterName;
+		
+	@JsonIgnore
 	public String getFullName()
 	{
-		return semesterName.getSemesterName() + " " + year;
+		return semesterName + " " + year;
 	}
 }

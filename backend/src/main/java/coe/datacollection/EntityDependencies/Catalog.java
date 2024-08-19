@@ -13,9 +13,8 @@ public class Catalog {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "_class_pre")
-    private ClassPre prefix;
+    @Column(name = "prefix")
+    private String prefix;
 
     @Column(name = "class_num")
     private int classNumber;
@@ -28,6 +27,6 @@ public class Catalog {
     private CClassType classType;
 
     public String getClassName() {
-        return prefix.getClassPre() + " " + classNumber;
+        return prefix + " " + classNumber;
     }
 }
