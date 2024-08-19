@@ -30,11 +30,8 @@ public class User {
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "pin")
-    private String pin;
-
-    //@Column(name = "salt")
-    //private char[] salt;
+    @Column(name = "password")
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "_load")
