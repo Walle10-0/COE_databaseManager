@@ -40,9 +40,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			System.out.println("password failed");
             throw new BadCredentialsException("Invalid username or password"); 
         } 
+		
+		String newRole = user.getUserRole().getRoleName();
   
         List<GrantedAuthority> authorities = new ArrayList<>(); 
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER")); 
+        authorities.add(new SimpleGrantedAuthority(newRole)); 
         return new UsernamePasswordAuthenticationToken(username, password, authorities); 
     } 
   
