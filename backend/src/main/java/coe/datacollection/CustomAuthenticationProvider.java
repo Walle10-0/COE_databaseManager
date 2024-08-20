@@ -2,11 +2,11 @@ package coe.datacollection;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import java.util.ArrayList;
@@ -45,6 +45,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   
         List<GrantedAuthority> authorities = new ArrayList<>(); 
         authorities.add(new SimpleGrantedAuthority(newRole)); 
+		authorities.add(new SimpleGrantedAuthority("u" + user.getUserId())); 
+		if (newRole.equals("department head")) {
+			authorities.add(new SimpleGrantedAuthority("d" + user.getDepartment().getId())); 
+		}
         return new UsernamePasswordAuthenticationToken(username, password, authorities); 
     } 
   

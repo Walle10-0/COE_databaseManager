@@ -1,6 +1,7 @@
 package coe.datacollection;
 import coe.datacollection.EntityDependencies.*;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
@@ -298,4 +299,23 @@ public class UserService {
 		}
 		return result;
 	}
+	
+	// auth stuff
+	private boolean hasRole(Authentication auth, String role) {
+		return (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(role)));
+	}
+	
+	public boolean canAccessUser(Authentication authentication, Long userId) {
+		boolean result = false;
+		result |= hasRole(authentication, "dean");
+		result |= hasRole(authentication, "u" + userId);
+        return result;
+    }
+	
+	public boolean canAccessDepartment(Authentication authentication, Long deptId) {
+		boolean result = false;
+		result |= hasRole(authentication, "dean");
+		result |= hasRole(authentication, "d" + deptId);
+        return result;
+    }
 }

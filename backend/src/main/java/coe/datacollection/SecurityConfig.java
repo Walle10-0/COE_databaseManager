@@ -27,9 +27,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(request -> request.anyRequest()
-                .authenticated())
+        return http
+			.securityMatcher("/api/**")
+			.authorizeHttpRequests((requests) -> requests
+			    .requestMatchers("/api/users").hasRole("dean")
+				.requestMatchers("/api/departments").hasRole("dean")
+                //.requestMatchers("/api/user/{id}").access(userService.canAccessUser(authentication, {id}))
+                //.requestMatchers("/api/department/{id}/users").access("@userService.canAccessDepartment(authentication, #id)")
+                .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults())
+			.logout((logout) -> logout.permitAll())
             .build();
     }
 }
